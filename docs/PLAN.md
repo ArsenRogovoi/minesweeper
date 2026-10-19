@@ -19,9 +19,9 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 1 — Core: board
 
-- [ ] Level presets (Beginner / Intermediate / Expert) and custom-size validation with XP clamping
-- [ ] Board creation with injected `random()`; exact mine count, no duplicates
-- [ ] Neighbour lookup (corners, edges) and adjacent-mine counts
+- [x] Level presets (Beginner / Intermediate / Expert) and custom-size validation with XP clamping
+- [x] Board creation with injected `random()`; exact mine count, no duplicates
+- [x] Neighbour lookup (corners, edges) and adjacent-mine counts
 
 **Done when:** board generation is deterministic in tests with a seeded random.
 
@@ -88,6 +88,6 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 10 — Polish and review
 
-- [ ] Side-by-side comparison with XP screenshots, fix visual differences
-- [ ] README with how to run, play and test
-- [ ] Final code review (`/code-review`), clean-up, coverage check
+- [x] Side-by-side comparison with XP screenshots, fix visual differences
+- [x] README with how to run, play and test
+- [x] Final code review (`/code-review`), clean-up, coverage check
