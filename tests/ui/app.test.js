@@ -260,4 +260,145 @@ describe("startApp", () => {
       );
     });
   });
+
+  describe("Game menu", () => {
+    /** localStorage stand-in that remembers what the app saves. */
+    function memoryStorage(initial) {
+      const data = { value: initial ? JSON.stringify(initial) : null };
+      return {
+        getItem: () => data.value,
+        setItem: (_key, value) => {
+          data.value = value;
+        },
+        saved: () => JSON.parse(data.value),
+      };
+    }
+    const noRandomNeeded = () => 0.5;
+    const title = (menu) =>
+      document.querySelector(`[data-menu="${menu}"] > .menubar__item`);
+    const item = (id) =>
+      document.querySelector(`.menu__item[data-item="${id}"]`);
+    const choose = (menu, ...ids) => {
+      title(menu).click();
+      ids.forEach((id) => item(id).click());
+    };
+    let storage;
+
+    beforeEach(() => {
+      storage = memoryStorage();
+      app = start({ storage, random: noRandomNeeded });
+    });
+
+    it("shows the Game menu title in the menu bar", () => {
+      expect(title("game").textContent).toBe("Game");
+    });
+
+    it("starts a new game from New", () => {
+      app.game.open(0);
+      choose("game", "new");
+      expect(app.game.getSnapshot().state).toBe("ready");
+    });
+
+    it.each([
+      ["intermediate", 256, "040"],
+      ["expert", 480, "099"],
+      ["beginner", 81, "010"],
+    ])(
+      "switches to %s: new field, new counter, saved",
+      (level, cells, mines) => {
+        choose("game", level);
+        expect(document.querySelectorAll(".cell")).toHaveLength(cells);
+        expect(digits(".led--mines")).toBe(mines);
+        expect(storage.saved().level).toBe(level);
+      },
+    );
+
+    it("checks the current level in the menu", () => {
+      choose("game", "expert");
+      title("game").click();
+      expect(item("expert").classList.contains("menu__item--checked")).toBe(
+        true,
+      );
+      expect(item("beginner").classList.contains("menu__item--checked")).toBe(
+        false,
+      );
+    });
+
+    it("restarts the game when the same level is chosen again", () => {
+      app.game.open(0);
+      choose("game", "beginner");
+      expect(app.game.getSnapshot().state).toBe("ready");
+    });
+
+    it("turns Marks off and on, and saves it", () => {
+      choose("game", "marks");
+      expect(app.game.getSnapshot().marks).toBe(false);
+      expect(storage.saved().marks).toBe(false);
+      choose("game", "marks");
+      expect(app.game.getSnapshot().marks).toBe(true);
+      expect(storage.saved().marks).toBe(true);
+    });
+
+    it("clears question marks when Marks are turned off", () => {
+      app.game.toggleMark(40);
+      app.game.toggleMark(40);
+      expect(cell(40).classList.contains("cell--question")).toBe(true);
+      choose("game", "marks");
+      expect(cell(40).classList.contains("cell--question")).toBe(false);
+    });
+
+    it("switches the language: page texts, menu texts, saved", () => {
+      choose("game", "language", "ru");
+      expect(document.title).toBe("Сапёр");
+      expect(title("game").textContent).toBe("Игра");
+      expect(storage.saved().language).toBe("ru");
+    });
+
+    it("keeps the game running when the language changes", () => {
+      app.game.open(80);
+      choose("game", "language", "ru");
+      expect(app.game.getSnapshot().state).toBe("playing");
+    });
+
+    it("switches the background and saves it", () => {
+      choose("game", "background", "gradient");
+      expect(document.body.classList.contains("desktop--gradient")).toBe(true);
+      expect(storage.saved().background).toBe("gradient");
+    });
+
+    it("saves every setting together", () => {
+      choose("game", "expert");
+      choose("game", "language", "ru");
+      choose("game", "background", "gradient");
+      expect(storage.saved()).toMatchObject({
+        level: "expert",
+        language: "ru",
+        background: "gradient",
+        marks: true,
+      });
+    });
+
+    it("restores all of it on the next start", () => {
+      choose("game", "expert");
+      choose("game", "language", "ru");
+      choose("game", "marks");
+      app = start({ storage, random: noRandomNeeded });
+      expect(document.querySelectorAll(".cell")).toHaveLength(480);
+      expect(title("game").textContent).toBe("Игра");
+      expect(app.game.getSnapshot().marks).toBe(false);
+    });
+
+    it("closes the menu when the field is pressed", () => {
+      title("game").click();
+      cell(40).dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          pointerType: "mouse",
+          button: 0,
+          buttons: 1,
+        }),
+      );
+      expect(document.querySelector(".menubar__menu--open")).toBeNull();
+    });
+  });
 });

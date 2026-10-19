@@ -43,9 +43,8 @@ describe("index.html layout", () => {
     }
   });
 
-  it("has the Game and Help items in the menu bar", () => {
-    const items = $$(".menubar__item").map((el) => el.textContent.trim());
-    expect(items).toEqual(["Game", "Help"]);
+  it("has an empty menu bar: the menus are drawn by JS from the current language", () => {
+    expect($(".menubar").children).toHaveLength(0);
   });
 
   it("has a status panel with mine counter, smiley and timer", () => {

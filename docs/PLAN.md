@@ -82,7 +82,7 @@ owner first. Tick `[x]` when a task is done.
       check marks, separators, submenus, drawn from a model
 - [x] Wire settings and i18n into the page: load settings at start, window title / language texts, desktop
       background class
-- [ ] Game menu: New (F2), levels, Marks (?), Language and Background submenus; save every change
+- [x] Game menu: New (F2), levels, Marks (?), Language and Background submenus; save every change
 - [ ] Dialog component (XP style, modal) and the Custom field dialog with validation and clamping
 - [ ] Help menu: About and Rules dialogs (decision 35)
 

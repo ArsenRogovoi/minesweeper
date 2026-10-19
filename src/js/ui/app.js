@@ -7,6 +7,8 @@ import { createSettingsStore, levelConfig } from "../services/settings.js";
 import { createControls } from "./controls.js";
 import { createFieldRenderer } from "./field.js";
 import { createKeyboardInput } from "./keyboard.js";
+import { createMenuBar } from "./menu.js";
+import { buildMenus } from "./menus.js";
 import { createMouseInput } from "./mouse.js";
 import { createStatusRenderer } from "./status.js";
 import { applyBackground, applyTexts } from "./texts.js";
@@ -28,7 +30,8 @@ import { applyBackground, applyTexts } from "./texts.js";
  *   mouse: ReturnType<typeof createMouseInput>,
  *   keyboard: ReturnType<typeof createKeyboardInput>,
  *   controls: ReturnType<typeof createControls>,
- *   i18n: ReturnType<typeof createI18n>
+ *   i18n: ReturnType<typeof createI18n>,
+ *   menuBar: ReturnType<typeof createMenuBar>
  * }}
  */
 export function startApp({
@@ -92,11 +95,44 @@ export function startApp({
   });
   const controls = createControls({ document, smiley: find(".smiley"), game });
 
+  function updateSettings(patch) {
+    Object.assign(settings, patch);
+    store.save(settings);
+  }
+
+  const actions = {
+    newGame: () => game.newGame(),
+    setLevel(level) {
+      updateSettings({ level });
+      game.newGame(levelConfig(settings));
+    },
+    toggleMarks() {
+      updateSettings({ marks: !settings.marks });
+      game.setMarks(settings.marks);
+    },
+    setLanguage(language) {
+      updateSettings({ language });
+      i18n.setLanguage(language);
+    },
+    setBackground(background) {
+      updateSettings({ background });
+      applyBackground(document, background);
+    },
+  };
+
+  const menuBar = createMenuBar({
+    container: find(".menubar"),
+    document,
+    getMenus: () => buildMenus({ t: i18n.t, settings, actions }),
+  });
+  menuBar.render();
+  i18n.subscribe(() => menuBar.render());
+
   game.subscribe(({ snapshot }) => render(snapshot));
   timer.subscribe(({ seconds }) => status.renderTimer(seconds));
 
   render(game.getSnapshot());
   status.renderTimer(timer.getSeconds());
 
-  return { game, timer, mouse, keyboard, controls, i18n };
+  return { game, timer, mouse, keyboard, controls, i18n, menuBar };
 }
