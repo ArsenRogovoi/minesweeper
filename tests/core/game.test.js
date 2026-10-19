@@ -39,7 +39,7 @@ describe("game states", () => {
     const events = recordEvents(game);
     game.open(1);
     expect(events.map((e) => e.type)).toEqual(["start"]);
-    game.open(2);
+    game.open(4);
     expect(events.map((e) => e.type)).toEqual(["start", "change"]);
   });
 
@@ -116,9 +116,9 @@ describe("opening cells", () => {
   it("opens an empty cell and floods through all connected empty cells", () => {
     const game = gameWithMines(CORNER_MINE);
     game.open(15);
-    // everything except the mine in the corner
+    // everything except the mine in the corner (flagged by the win)
     expect(openIndices(game)).toEqual([...Array(15).keys()].map((i) => i + 1));
-    expect(game.getSnapshot().cells[0].state).toBe("closed");
+    expect(game.getSnapshot().cells[0].state).toBe("flag");
   });
 
   it("stops the flood at numbered cells and does not open behind them", () => {
@@ -127,7 +127,7 @@ describe("opening cells", () => {
     game.open(0);
     const { cells } = game.getSnapshot();
     expect(cells.filter((c) => c.state === "open")).toHaveLength(24);
-    expect(cells[12].state).toBe("closed");
+    expect(cells[12].state).toBe("flag"); // flagged by the win
     expect(cells[6]).toEqual({ state: "open", adjacent: 1 });
   });
 
@@ -148,9 +148,9 @@ describe("opening cells", () => {
     const mineIndices = Array.from({ length: 9 }, (_, row) => row * 9 + 8);
     const game = gameWithMines({ width: 9, height: 9, mineIndices });
     game.open(0);
-    const { cells } = game.getSnapshot();
+    const { state, cells } = game.getSnapshot();
     expect(cells.filter((c) => c.state === "open")).toHaveLength(72);
-    expect(mineIndices.every((i) => cells[i].state === "closed")).toBe(true);
+    expect(state).toBe("won"); // wrapping onto the mines would have lost the game
   });
 
   it("ignores an already opened cell", () => {
@@ -161,12 +161,16 @@ describe("opening cells", () => {
     expect(events).toEqual([]);
   });
 
-  it("emits a single change event for a whole flood", () => {
-    const game = gameWithMines(CORNER_MINE);
-    game.open(5);
+  it("emits a single event for a whole flood", () => {
+    const game = gameWithMines({
+      width: 5,
+      height: 3,
+      mineIndices: [2, 7, 12],
+    });
     const events = recordEvents(game);
-    game.open(15);
-    expect(events.map((e) => e.type)).toEqual(["change"]);
+    game.open(0);
+    expect(openIndices(game)).toHaveLength(6);
+    expect(events.map((e) => e.type)).toEqual(["start"]);
   });
 });
 
@@ -283,5 +287,130 @@ describe("marks", () => {
     game.newGame();
     expect(stateOf(game, 3)).toBe("closed");
     expect(game.getSnapshot().marks).toBe(false);
+  });
+});
+
+describe("loss", () => {
+  // 4x4 with mines at 0, 5 and 10
+  const MINES = { width: 4, height: 4, mineIndices: [0, 5, 10] };
+  const stateOf = (game, index) => game.getSnapshot().cells[index].state;
+
+  it("is lost when a mine is opened, and the clicked mine is exploded", () => {
+    const game = gameWithMines(MINES);
+    game.open(15);
+    game.open(5);
+    expect(game.getSnapshot().state).toBe("lost");
+    expect(stateOf(game, 5)).toBe("exploded");
+  });
+
+  it("emits start and lose when the first click hits a mine", () => {
+    const game = gameWithMines(MINES);
+    const events = recordEvents(game);
+    game.open(5);
+    expect(events.map((e) => e.type)).toEqual(["start", "lose"]);
+    expect(events[1].snapshot.state).toBe("lost");
+  });
+
+  it("emits only lose when a mine is hit during the game", () => {
+    const game = gameWithMines(MINES);
+    game.open(15);
+    const events = recordEvents(game);
+    game.open(5);
+    expect(events.map((e) => e.type)).toEqual(["lose"]);
+  });
+
+  it("reveals the other mines, keeps correct flags and shows wrong flags", () => {
+    const game = gameWithMines(MINES);
+    game.open(15);
+    game.toggleMark(0); // correct flag
+    game.toggleMark(1); // wrong flag
+    game.toggleMark(10);
+    game.toggleMark(10); // question mark on a mine
+    game.open(5);
+    expect(stateOf(game, 5)).toBe("exploded");
+    expect(stateOf(game, 0)).toBe("flag");
+    expect(stateOf(game, 1)).toBe("wrongFlag");
+    expect(stateOf(game, 10)).toBe("mine");
+  });
+
+  it("leaves safe closed cells closed and opened cells opened", () => {
+    const game = gameWithMines(MINES);
+    game.open(15);
+    game.open(5);
+    expect(stateOf(game, 1)).toBe("closed");
+    expect(stateOf(game, 15)).toBe("open");
+    expect(game.getSnapshot().cells[15].adjacent).toBe(1);
+  });
+
+  it("ignores opening and marking until a new game", () => {
+    const game = gameWithMines(MINES);
+    game.open(5);
+    const events = recordEvents(game);
+    game.open(1);
+    game.toggleMark(1);
+    expect(stateOf(game, 1)).toBe("closed");
+    expect(events).toEqual([]);
+  });
+
+  it("can start a new game after a loss", () => {
+    const game = gameWithMines(MINES);
+    game.open(5);
+    game.newGame();
+    const snapshot = game.getSnapshot();
+    expect(snapshot.state).toBe("ready");
+    expect(snapshot.cells.every((c) => c.state === "closed")).toBe(true);
+  });
+});
+
+describe("win", () => {
+  const stateOf = (game, index) => game.getSnapshot().cells[index].state;
+
+  it("is won when the last safe cell is opened", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(15);
+    expect(game.getSnapshot().state).toBe("won");
+  });
+
+  it("is not won while a safe cell is still closed", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(5);
+    expect(game.getSnapshot().state).toBe("playing");
+  });
+
+  it("emits start and win when one click opens the whole field", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const events = recordEvents(game);
+    game.open(15);
+    expect(events.map((e) => e.type)).toEqual(["start", "win"]);
+  });
+
+  it("emits only win when the last cell is opened during the game", () => {
+    const game = gameWithMines({ width: 4, height: 4, mineIndices: [0, 15] });
+    game.open(5);
+    const events = recordEvents(game);
+    game.open(3); // opens the rest of the field by flood
+    expect(events.map((e) => e.type)).toEqual(["win"]);
+  });
+
+  it("flags the remaining mines automatically, including question marks", () => {
+    const game = gameWithMines({ width: 4, height: 4, mineIndices: [0, 15] });
+    game.toggleMark(0); // already flagged: must stay a flag
+    game.toggleMark(15);
+    game.toggleMark(15); // "?" on a mine
+    game.open(3);
+    expect(game.getSnapshot().state).toBe("won");
+    expect(stateOf(game, 0)).toBe("flag");
+    expect(stateOf(game, 15)).toBe("flag");
+  });
+
+  it("ignores opening and marking after the win", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(15);
+    const events = recordEvents(game);
+    game.toggleMark(0);
+    game.open(0);
+    expect(game.getSnapshot().state).toBe("won");
+    expect(stateOf(game, 0)).toBe("flag");
+    expect(events).toEqual([]);
   });
 });
