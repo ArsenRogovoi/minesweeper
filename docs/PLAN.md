@@ -32,7 +32,7 @@ owner first. Tick `[x]` when a task is done.
 - [x] Mark cycle (flag / “?” / closed), with Marks on and off; flags block opening
 - [x] Chord: opens neighbours only when flag count matches; wrong flags lead to loss
 - [x] Win detection with auto-flagging; loss with exploded mine, revealed mines, wrong flags
-- [ ] Mine counter (can be negative)
+- [x] Mine counter (can be negative)
 - [ ] Event / snapshot API for the UI
 
 **Done when:** every rule in REQUIREMENTS §1.2 has a test.

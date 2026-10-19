@@ -7,8 +7,8 @@ import { LEVELS } from "./levels.js";
  * @typedef {"closed"|"flag"|"question"|"open"|"exploded"|"mine"|"wrongFlag"} CellViewState
  * @typedef {{state: CellViewState, adjacent: number}} CellView
  * @typedef {{
- *   state: GameState, width: number, height: number, mines: number, marks: boolean,
- *   cells: CellView[]
+ *   state: GameState, width: number, height: number, mines: number,
+ *   minesLeft: number, marks: boolean, cells: CellView[]
  * }} Snapshot
  * @typedef {{type: "new"|"start"|"win"|"lose"|"change", snapshot: Snapshot}} GameEvent
  */
@@ -24,6 +24,8 @@ import { LEVELS } from "./levels.js";
  * - "lose"   a mine was opened;
  * - "change" the field changed and no other event described it.
  * Every event carries the snapshot taken after the whole command.
+ *
+ * `minesLeft` is the mine counter: mines minus flags, it can be negative.
  *
  * Cell states in a snapshot: "closed", "flag", "question", "open" (with `adjacent`).
  * After a loss: "exploded" (the opened mine), "mine" (other mines), "wrongFlag".
@@ -54,6 +56,10 @@ export function createGame({ random, config = LEVELS.beginner, marks = true }) {
     safeOpened = 0;
   }
 
+  function countFlags() {
+    return cellStates.filter((cellState) => cellState === "flag").length;
+  }
+
   function isOver() {
     return state === "won" || state === "lost";
   }
@@ -81,6 +87,7 @@ export function createGame({ random, config = LEVELS.beginner, marks = true }) {
       width: board.width,
       height: board.height,
       mines: currentConfig.mines,
+      minesLeft: currentConfig.mines - countFlags(),
       marks: marksEnabled,
       cells: board.cells.map((_, index) => viewCell(index)),
     };

@@ -552,3 +552,53 @@ describe("chord", () => {
     expect(events).toEqual([]);
   });
 });
+
+describe("mine counter", () => {
+  const minesLeft = (game) => game.getSnapshot().minesLeft;
+
+  it("starts at the number of mines", () => {
+    expect(minesLeft(gameWithMines(CORNER_MINE))).toBe(1);
+    expect(minesLeft(createGame({ random: () => 0.5 }))).toBe(10);
+  });
+
+  it("decreases with every flag and recovers when the flag is removed", () => {
+    const game = gameWithMines({ width: 4, height: 4, mineIndices: [0, 1, 2] });
+    game.toggleMark(5);
+    expect(minesLeft(game)).toBe(2);
+    game.toggleMark(6);
+    expect(minesLeft(game)).toBe(1);
+    game.toggleMark(5); // flag -> "?" does not count as a flag
+    expect(minesLeft(game)).toBe(2);
+    game.toggleMark(5); // "?" -> closed
+    expect(minesLeft(game)).toBe(2);
+  });
+
+  it("can become negative", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(1);
+    game.toggleMark(2);
+    game.toggleMark(3);
+    expect(minesLeft(game)).toBe(-2);
+  });
+
+  it("shows 0 after a win because the remaining mines are flagged", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(15);
+    expect(game.getSnapshot().state).toBe("won");
+    expect(minesLeft(game)).toBe(0);
+  });
+
+  it("counts only the real flags after a loss", () => {
+    const game = gameWithMines({ width: 4, height: 4, mineIndices: [0, 5] });
+    game.toggleMark(1);
+    game.open(5);
+    expect(minesLeft(game)).toBe(1);
+  });
+
+  it("is restored by a new game", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(1);
+    game.newGame();
+    expect(minesLeft(game)).toBe(1);
+  });
+});
