@@ -36,15 +36,17 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 27 | Coverage thresholds  | `core/` 100 % lines and branches; whole project ≥ 90 % (was P4)         |
 | 28 | Commits              | Agent commits on its own: one commit per stage and one per plan task (2026-10-19) |
 | 29 | Desktop background   | Resolves Q7. Switchable, two options for now: solid XP desktop colour and a Bliss-like gradient (own artwork). Chosen in a “Background” submenu of the Game menu; saved in localStorage with the other settings (2026-10-19) |
+| 30 | Cell size            | 16 × 16 px as in XP; the whole window is scaled through one CSS variable (×1 by default, ×2 on high-DPI); no scale choice in the menu (was P6) |
+| 31 | Default background   | Solid XP colour until the player chooses another (was P7)                |
 
 ## Proposed (need confirmation)
 
 | #  | Topic                   | Proposal                                                                              |
 | -- | ----------------------- | ------------------------------------------------------------------------------------- |
 | P1 | ~~Node.js in WSL~~      | ~~Install via nvm, Node 22 LTS~~ — superseded by decision 23                          |
-| P7 | Default background      | Solid XP colour (simplest, least distracting)                                         |
+| P7 | ~~Default background~~  | ~~Solid XP colour~~ — agreed as decision 31                                           |
 | P5 | Long-press duration     | 400 ms, defined as a single constant                                                  |
-| P6 | Cell size               | 16 × 16 px as in XP, whole window scaled ×2 on high-DPI / via CSS variable            |
+| P6 | ~~Cell size~~          | ~~16 × 16 px as in XP, whole window scaled ×2 on high-DPI / via CSS variable~~ — agreed as decision 30 |
 
 ## Open questions (to be answered before the related stage)
 
