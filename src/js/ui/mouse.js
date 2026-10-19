@@ -1,3 +1,5 @@
+import { getNeighbors } from "../core/board.js";
+
 const BUTTON_NAMES = { 0: "left", 1: "middle", 2: "right" };
 
 /**
@@ -11,19 +13,24 @@ const BUTTON_NAMES = { 0: "left", 1: "middle", 2: "right" };
  * Right button: cycles the mark (flag, "?", closed) on press. The browser context
  * menu is disabled on the field.
  *
+ * Chord: both buttons or the middle button. The cell under the pointer and its
+ * closed neighbours look pressed; the first button released does the chord on the
+ * cell under the pointer, the rest of the gesture is ignored.
+ *
  * Touch and pen pointers are ignored here (see the touch stage).
  *
  * @param {{
  *   document: Document,
  *   field: HTMLElement,
- *   game: {getSnapshot: Function, open: Function, toggleMark: Function},
+ *   game: {getSnapshot: Function, open: Function, toggleMark: Function, chord: Function},
  *   onFeedback: (feedback: {pressedCells: number[], pressing: boolean}) => void
  * }} options
  * @returns {{isPressing: () => boolean, destroy: () => void}}
  */
 export function createMouseInput({ document, field, game, onFeedback }) {
   const held = new Set(); // names of the buttons that went down on the field
-  let mode = null; // "open" | "mark" | "chord", set by the first press of a gesture
+  // "open" | "mark" | "chord" | "done" (chord already done); set by the first press of a gesture
+  let mode = null;
   let target = null; // index of the cell under the pointer, null outside the field
   let lastFeedback = "";
 
@@ -42,10 +49,27 @@ export function createMouseInput({ document, field, game, onFeedback }) {
     return state === "closed" || state === "question";
   }
 
+  function pressedCells() {
+    if (target === null) {
+      return [];
+    }
+    if (mode === "open") {
+      return isPressable(target) ? [target] : [];
+    }
+    if (mode === "chord") {
+      const { width, height } = game.getSnapshot();
+      return [target, ...getNeighbors(width, height, target)]
+        .filter(isPressable)
+        .sort((a, b) => a - b);
+    }
+    return [];
+  }
+
   function refresh() {
-    const pressedCells =
-      mode === "open" && target !== null && isPressable(target) ? [target] : [];
-    const feedback = { pressedCells, pressing: held.size > 0 };
+    const feedback = {
+      pressedCells: pressedCells(),
+      pressing: held.size > 0 && mode !== "done",
+    };
     const key = JSON.stringify(feedback);
     if (key !== lastFeedback) {
       lastFeedback = key;
@@ -55,9 +79,12 @@ export function createMouseInput({ document, field, game, onFeedback }) {
 
   /** Both buttons or the middle one make a chord; otherwise the first button decides. */
   function updateMode() {
+    if (mode === "done") {
+      return;
+    }
     if (held.has("middle") || (held.has("left") && held.has("right"))) {
       mode = "chord";
-    } else if (mode === null) {
+    } else {
       mode = held.has("left") ? "open" : "mark";
     }
   }
@@ -105,13 +132,22 @@ export function createMouseInput({ document, field, game, onFeedback }) {
       return;
     }
     const index = cellIndexOf(event);
-    const opens = mode === "open" && event.button === 0 && index !== null;
+    const action = mode;
     held.delete(BUTTON_NAMES[event.button]);
     if (held.size === 0) {
       reset();
+    } else if (mode === "chord") {
+      mode = "done";
+      target = null;
+      refresh();
     }
-    if (opens) {
+    if (index === null) {
+      return;
+    }
+    if (action === "open") {
       game.open(index);
+    } else if (action === "chord") {
+      game.chord(index);
     }
   }
 

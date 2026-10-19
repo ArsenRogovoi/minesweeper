@@ -309,3 +309,147 @@ describe("mouse: context menu", () => {
     expect(event.defaultPrevented).toBe(false);
   });
 });
+
+describe("mouse: chord", () => {
+  // cell 6 is the number 3, its mines (2, 7, 12) get flags; the closed
+  // neighbours that are not flagged are 0, 1, 5, 10 and 11
+  function numberWithFlags(flags = [2, 7, 12]) {
+    game.open(6);
+    flags.forEach((i) => game.toggleMark(i));
+    feedback.length = 0;
+  }
+  const CLOSED_NEIGHBOURS = [0, 1, 5, 10, 11];
+
+  it("presses all closed neighbours while both buttons are held", () => {
+    numberWithFlags();
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    expect(lastFeedback()).toEqual({
+      pressedCells: CLOSED_NEIGHBOURS,
+      pressing: true,
+    });
+  });
+
+  it("also presses the cell itself when it is closed", () => {
+    mouse.down(cell(8));
+    mouse.down(cell(8), 2);
+    // 8 itself and its eight closed neighbours except the missing column on the right
+    expect(lastFeedback().pressedCells).toEqual([2, 3, 4, 7, 8, 9, 12, 13, 14]);
+  });
+
+  it("does not press flagged or opened neighbours", () => {
+    numberWithFlags();
+    mouse.down(cell(6), 1);
+    expect(lastFeedback().pressedCells).not.toContain(2);
+    expect(lastFeedback().pressedCells).not.toContain(7);
+    expect(lastFeedback().pressedCells).not.toContain(6);
+  });
+
+  it("opens the neighbours when the first button is released", () => {
+    numberWithFlags();
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    expect(stateOf(0)).toBe("closed");
+    mouse.up(cell(6));
+    CLOSED_NEIGHBOURS.forEach((i) => expect(stateOf(i)).toBe("open"));
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: false });
+  });
+
+  it("works when the right button is released first", () => {
+    numberWithFlags();
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    mouse.up(cell(6), 2);
+    expect(stateOf(0)).toBe("open");
+  });
+
+  it("works with the right button pressed first", () => {
+    numberWithFlags();
+    mouse.down(cell(6), 2);
+    mouse.down(cell(6));
+    expect(lastFeedback().pressedCells).toEqual(CLOSED_NEIGHBOURS);
+    mouse.up(cell(6));
+    expect(stateOf(0)).toBe("open");
+  });
+
+  it("works with the middle button alone", () => {
+    numberWithFlags();
+    mouse.down(cell(6), 1);
+    expect(lastFeedback().pressedCells).toEqual(CLOSED_NEIGHBOURS);
+    mouse.up(cell(6), 1);
+    CLOSED_NEIGHBOURS.forEach((i) => expect(stateOf(i)).toBe("open"));
+  });
+
+  it("does not open or mark anything on the second release", () => {
+    numberWithFlags();
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    mouse.up(cell(6));
+    const snapshot = JSON.stringify(game.getSnapshot());
+    mouse.up(cell(6), 2);
+    expect(JSON.stringify(game.getSnapshot())).toBe(snapshot);
+  });
+
+  it("does not start a new press after the chord while a button is still held", () => {
+    numberWithFlags();
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    mouse.up(cell(6));
+    mouse.down(cell(8)); // right is still down
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: false });
+    mouse.up(cell(8));
+    expect(stateOf(8)).toBe("closed");
+  });
+
+  it("moves the pressed neighbours with the pointer and chords where it was released", () => {
+    numberWithFlags();
+    game.open(8);
+    mouse.down(cell(6), 1);
+    mouse.move(cell(8)); // an opened number with the same flags around it
+    expect(lastFeedback().pressedCells).toEqual([3, 4, 9, 13, 14]);
+    mouse.move(cell(6));
+    expect(lastFeedback().pressedCells).toEqual(CLOSED_NEIGHBOURS);
+    mouse.up(cell(6), 1);
+    expect(stateOf(0)).toBe("open");
+  });
+
+  it("does nothing when the flag count does not match the number", () => {
+    numberWithFlags([2, 7]);
+    mouse.down(cell(6), 1);
+    mouse.up(cell(6), 1);
+    expect(stateOf(0)).toBe("closed");
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: false });
+  });
+
+  it("does nothing on a closed cell", () => {
+    mouse.down(cell(8), 1);
+    mouse.up(cell(8), 1);
+    expect(game.getSnapshot().state).toBe("ready");
+    expect(stateOf(8)).toBe("closed");
+  });
+
+  it("does nothing when released outside the field", () => {
+    numberWithFlags();
+    mouse.down(cell(6), 1);
+    mouse.move(document.getElementById("outside"));
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: true });
+    mouse.up(document.getElementById("outside"), 1);
+    expect(stateOf(0)).toBe("closed");
+  });
+
+  it("loses the game when a flag is wrong", () => {
+    numberWithFlags([0, 1, 5]);
+    mouse.down(cell(6), 1);
+    mouse.up(cell(6), 1);
+    expect(game.getSnapshot().state).toBe("lost");
+  });
+
+  it("is ignored after the game is over", () => {
+    numberWithFlags([0, 1, 5]);
+    mouse.down(cell(6), 1);
+    mouse.up(cell(6), 1);
+    feedback.length = 0;
+    mouse.down(cell(6), 1);
+    expect(feedback).toEqual([]);
+  });
+});
