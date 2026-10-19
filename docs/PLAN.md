@@ -39,7 +39,7 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 3 — Core: timer
 
-- [ ] Timer with injected clock/scheduler: starts at first open, shows 1, +1 per second, stops at 999,
+- [x] Timer with injected clock/scheduler: starts at first open, shows 1, +1 per second, stops at 999,
       stops on win/loss, resets on new game
 
 ## Stage 4 — Services

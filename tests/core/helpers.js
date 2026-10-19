@@ -30,3 +30,43 @@ export function recordEvents(game) {
   game.subscribe((event) => events.push(event));
   return events;
 }
+
+/**
+ * Manual replacement for setInterval / clearInterval.
+ * `advance(ms)` runs the due callbacks in time order.
+ */
+export function createFakeScheduler() {
+  let now = 0;
+  let nextHandle = 1;
+  const intervals = new Map();
+
+  return {
+    setInterval(callback, every) {
+      const handle = nextHandle++;
+      intervals.set(handle, { callback, every, next: now + every });
+      return handle;
+    },
+    clearInterval(handle) {
+      intervals.delete(handle);
+    },
+    advance(ms) {
+      const target = now + ms;
+      for (;;) {
+        const due = [...intervals.values()]
+          .filter((interval) => interval.next <= target)
+          .sort((a, b) => a.next - b.next)[0];
+        if (!due) {
+          break;
+        }
+        now = due.next;
+        due.next += due.every;
+        due.callback();
+      }
+      now = target;
+    },
+    /** Number of intervals that are still scheduled. */
+    get activeCount() {
+      return intervals.size;
+    },
+  };
+}
