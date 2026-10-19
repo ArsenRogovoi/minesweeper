@@ -4,6 +4,9 @@ import { DEFAULT_LANGUAGE, LANGUAGES } from "./languages.js";
 /** localStorage key under which all settings are stored as one JSON object. */
 export const SETTINGS_KEY = "minesweeper.settings";
 
+/** Desktop backgrounds: plain XP colour and a Bliss-like gradient. The first is the default. */
+export const BACKGROUNDS = Object.freeze(["solid", "gradient"]);
+
 const LEVEL_NAMES = [...Object.keys(LEVELS), "custom"];
 
 /**
@@ -11,7 +14,8 @@ const LEVEL_NAMES = [...Object.keys(LEVELS), "custom"];
  *   level: "beginner"|"intermediate"|"expert"|"custom",
  *   custom: {width: number, height: number, mines: number},
  *   marks: boolean,
- *   language: "ru"|"en"
+ *   language: "ru"|"en",
+ *   background: "solid"|"gradient"
  * }} Settings
  */
 
@@ -30,11 +34,14 @@ function normalize(raw, defaultLanguage) {
     language: LANGUAGES.includes(source.language)
       ? source.language
       : defaultLanguage,
+    background: BACKGROUNDS.includes(source.background)
+      ? source.background
+      : BACKGROUNDS[0],
   };
 }
 
 /**
- * Stores the settings (level, custom field, Marks, language) in a localStorage-like
+ * Stores the settings (level, custom field, Marks, language, background) in a localStorage-like
  * storage. Missing, broken or unavailable storage never breaks the game: the
  * defaults are used instead.
  *

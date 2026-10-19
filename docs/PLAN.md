@@ -46,11 +46,13 @@ owner first. Tick `[x]` when a task is done.
 
 - [x] Settings storage: load/save level, custom size, Marks, language; safe defaults on missing/broken data
 - [x] i18n: `ru` / `en` dictionaries, browser-language detection, `t(key)`, change-language event
+- [x] Background setting (decision 29): `solid` / `gradient` in settings storage, texts in both dictionaries
 
 ## Stage 5 — Static layout and styles
 
-- [ ] Resolve Q7
+- [x] Resolve Q7 (decision 29)
 - [ ] SCSS 7-1 structure with variables (colours, sizes)
+- [ ] Desktop background: solid XP colour and Bliss-like gradient, switched by a body class
 - [ ] Luna window frame with decorative buttons, menu bar, status panel, field container (static HTML)
 
 **Done when:** the static page looks like the XP window (owner reviews a screenshot).
@@ -75,7 +77,8 @@ owner first. Tick `[x]` when a task is done.
 ## Stage 8 — Menu and dialog
 
 - [ ] Resolve Q2, Q3
-- [ ] Game menu: open/close behaviour like XP, check marks, level switch, Marks toggle, language switch
+- [ ] Game menu: open/close behaviour like XP, check marks, level switch, Marks toggle, language switch,
+      Background submenu (decision 29)
 - [ ] Custom dialog with validation and clamping
 - [ ] Help menu (per Q2)
 - [ ] Wire settings persistence and i18n into the UI

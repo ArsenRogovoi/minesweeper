@@ -19,6 +19,7 @@ const DEFAULTS = {
   custom: { width: 9, height: 9, mines: 10 },
   marks: true,
   language: "en",
+  background: "solid",
 };
 
 describe("settings store: load", () => {
@@ -47,6 +48,7 @@ describe("settings store: load", () => {
       custom: { width: 20, height: 12, mines: 33 },
       marks: false,
       language: "ru",
+      background: "gradient",
     };
     const store = createSettingsStore({
       storage: memoryStorage({ [SETTINGS_KEY]: JSON.stringify(saved) }),
@@ -84,6 +86,7 @@ describe("settings store: load", () => {
       custom: "big",
       marks: "yes",
       language: "de",
+      background: "wallpaper",
     });
     const store = createSettingsStore({
       storage: memoryStorage({ [SETTINGS_KEY]: raw }),
@@ -92,7 +95,12 @@ describe("settings store: load", () => {
   });
 
   it("keeps valid fields when others are missing or invalid", () => {
-    const raw = JSON.stringify({ level: "expert", marks: 1, language: "ru" });
+    const raw = JSON.stringify({
+      level: "expert",
+      marks: 1,
+      language: "ru",
+      background: "gradient",
+    });
     const store = createSettingsStore({
       storage: memoryStorage({ [SETTINGS_KEY]: raw }),
     });
@@ -100,7 +108,17 @@ describe("settings store: load", () => {
       ...DEFAULTS,
       level: "expert",
       language: "ru",
+      background: "gradient",
     });
+  });
+
+  it.each(["solid", "gradient"])("accepts the background %s", (background) => {
+    const store = createSettingsStore({
+      storage: memoryStorage({
+        [SETTINGS_KEY]: JSON.stringify({ background }),
+      }),
+    });
+    expect(store.load().background).toBe(background);
   });
 
   it("clamps a stored custom field to the XP limits", () => {
@@ -146,6 +164,7 @@ describe("settings store: save", () => {
       custom: { width: 15, height: 11, mines: 25 },
       marks: false,
       language: "ru",
+      background: "gradient",
     };
     expect(store.save(settings)).toBe(true);
     expect(createSettingsStore({ storage }).load()).toEqual(settings);
@@ -165,6 +184,7 @@ describe("settings store: save", () => {
       custom: { width: 500, height: 500, mines: 1 },
       marks: "maybe",
       language: "fr",
+      background: "plaid",
     });
     expect(JSON.parse(storage.data.get(SETTINGS_KEY))).toEqual({
       ...DEFAULTS,
