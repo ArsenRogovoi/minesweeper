@@ -66,13 +66,14 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 7 — Mouse input
 
-- [ ] Resolve Q6
+- [x] Resolve Q6 (decision 34)
 - [ ] Left press/move/release with pressed-cell feedback; open on release
 - [ ] Right click mark cycle; context menu disabled on the field
 - [ ] Chord via both buttons or middle button, with neighbour feedback
 - [ ] Smiley reactions; smiley click and F2 start a new game
+- [ ] Keyboard (decision 34): arrows move a cursor, Space opens / chords, F cycles flag and “?”
 
-**Done when:** a full game can be played with the mouse at all three levels.
+**Done when:** a full game can be played with the mouse (and the keyboard) at all three levels.
 
 ## Stage 8 — Menu and dialog
 
