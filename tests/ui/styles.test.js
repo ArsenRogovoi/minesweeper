@@ -35,6 +35,8 @@ describe("SCSS", () => {
     ".dialog__body",
     ".dialog__field",
     ".dialog__buttons",
+    ".dialog__heading",
+    ".dialog__icon",
     ".dialog__button",
     ".dialog__button--primary",
     ".game",

@@ -12,10 +12,13 @@
 .dialog {
   width: max-content;
   max-width: 100vw;
+  max-height: 100vh; // on a small screen the body scrolls, the buttons stay reachable
   box-shadow: u(4) u(6) u(16) rgb(0 0 0 / 50%);
 }
 
 .dialog__body {
+  min-height: 0;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: u(14);
@@ -45,6 +48,35 @@
     border: u(1) solid $dialog-input-border;
     font: inherit;
   }
+}
+
+.dialog__heading {
+  margin: u(4) 0 u(2);
+  font-size: inherit;
+}
+
+.dialog__rules {
+  display: flex;
+  flex-direction: column;
+  gap: u(4);
+  max-width: u(340);
+}
+
+.dialog__about {
+  display: flex;
+  gap: u(14);
+  align-items: flex-start;
+}
+
+.dialog__icon {
+  flex: none;
+  width: u(32);
+  height: u(32);
+  @include icon("icon.svg", 32);
+}
+
+.dialog__name {
+  font-weight: bold;
 }
 
 .dialog__text {

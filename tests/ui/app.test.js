@@ -494,4 +494,36 @@ describe("startApp", () => {
       );
     });
   });
+
+  describe("Help menu", () => {
+    const openHelp = (id) => {
+      document.querySelector('[data-menu="help"] > .menubar__item').click();
+      document.querySelector(`.menu__item[data-item="${id}"]`).click();
+    };
+    const dialogTitle = () =>
+      document.querySelector(".dialog .window__title")?.textContent;
+
+    it("opens the About dialog", () => {
+      openHelp("about");
+      expect(dialogTitle()).toBe("About Minesweeper");
+    });
+
+    it("opens the Rules dialog", () => {
+      openHelp("rules");
+      expect(dialogTitle()).toBe("Rules");
+    });
+
+    it("shows the dialogs in the current language", () => {
+      app.i18n.setLanguage("ru");
+      openHelp("rules");
+      expect(dialogTitle()).toBe("Правила");
+    });
+
+    it("leaves the game untouched", () => {
+      app.game.open(80);
+      openHelp("about");
+      document.querySelector(".dialog__button").click();
+      expect(app.game.getSnapshot().state).toBe("playing");
+    });
+  });
 });

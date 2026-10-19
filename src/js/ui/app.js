@@ -7,6 +7,7 @@ import { createSettingsStore, levelConfig } from "../services/settings.js";
 import { createControls } from "./controls.js";
 import { openCustomDialog } from "./custom-dialog.js";
 import { createFieldRenderer } from "./field.js";
+import { openAboutDialog, openRulesDialog } from "./help-dialogs.js";
 import { createKeyboardInput } from "./keyboard.js";
 import { createMenuBar } from "./menu.js";
 import { buildMenus } from "./menus.js";
@@ -119,6 +120,8 @@ export function startApp({
       updateSettings({ background });
       applyBackground(document, background);
     },
+    about: () => openAboutDialog({ document, t: i18n.t }),
+    rules: () => openRulesDialog({ document, t: i18n.t }),
     customField() {
       openCustomDialog({
         document,

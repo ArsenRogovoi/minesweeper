@@ -84,7 +84,7 @@ owner first. Tick `[x]` when a task is done.
       background class
 - [x] Game menu: New (F2), levels, Marks (?), Language and Background submenus; save every change
 - [x] Dialog component (XP style, modal) and the Custom field dialog with validation and clamping
-- [ ] Help menu: About and Rules dialogs (decision 35)
+- [x] Help menu: About and Rules dialogs (decision 35)
 
 ## Stage 9 — Touch
 

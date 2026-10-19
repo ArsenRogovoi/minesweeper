@@ -15,6 +15,8 @@ beforeEach(() => {
     setLanguage: vi.fn(),
     setBackground: vi.fn(),
     customField: vi.fn(),
+    about: vi.fn(),
+    rules: vi.fn(),
   };
   settings = {
     level: "beginner",
@@ -175,5 +177,29 @@ describe("Game menu: Language and Background submenus", () => {
     expect(actions.setBackground).toHaveBeenCalledWith("gradient");
     find(sub, "solid").action();
     expect(actions.setBackground).toHaveBeenCalledWith("solid");
+  });
+});
+
+describe("Help menu", () => {
+  const helpMenu = (menus = build()) => menus.find((m) => m.id === "help");
+
+  it("is the second menu and is named in the current language", () => {
+    expect(build()[1]).toMatchObject({ id: "help", label: "Help" });
+    expect(build("ru")[1]).toMatchObject({ id: "help", label: "Справка" });
+  });
+
+  it("has Rules and About, in the current language", () => {
+    expect(labels(helpMenu().items)).toEqual(["Rules", "About Minesweeper"]);
+    expect(labels(helpMenu(build("ru")).items)).toEqual([
+      "Правила",
+      "О программе «Сапёр»",
+    ]);
+  });
+
+  it("opens the rules and the about dialog", () => {
+    find(helpMenu().items, "rules").action();
+    expect(actions.rules).toHaveBeenCalledTimes(1);
+    find(helpMenu().items, "about").action();
+    expect(actions.about).toHaveBeenCalledTimes(1);
   });
 });

@@ -11,7 +11,9 @@
  *     toggleMarks: () => void,
  *     setLanguage: (language: "ru"|"en") => void,
  *     setBackground: (background: "solid"|"gradient") => void,
- *     customField: () => void
+ *     customField: () => void,
+ *     about: () => void,
+ *     rules: () => void
  *   }
  * }} options
  * @returns {import("./menu.js").MenuModel[]}
@@ -73,6 +75,14 @@ export function buildMenus({ t, settings, actions }) {
             action: () => actions.setBackground(background),
           })),
         },
+      ],
+    },
+    {
+      id: "help",
+      label: t("menu.help"),
+      items: [
+        { id: "rules", label: t("help.rules"), action: actions.rules },
+        { id: "about", label: t("help.about"), action: actions.about },
       ],
     },
   ];
