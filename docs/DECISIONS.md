@@ -39,6 +39,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 30 | Cell size            | 16 × 16 px as in XP; the whole window is scaled through one CSS variable (×1 by default, ×2 on high-DPI); no scale choice in the menu (was P6) |
 | 31 | Default background   | Solid XP colour until the player chooses another (was P7)                |
 | 32 | Marks turned off    | Existing “?” marks disappear (become closed); flags stay (2026-10-19)    |
+| 33 | Supported browsers   | Resolves Q5. Wide support: browser versions released in the last two years (Chrome, Edge, Firefox, Safari); older ones are not checked (2026-10-19) |
 
 ## Proposed (need confirmation)
 
@@ -57,6 +58,6 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | Q2 | 8     | Help menu: what should it contain? (e.g. “About” dialog only / rules page / disabled items as decoration) |
 | Q3 | 8     | Should the XP “Exit” item exist in the Game menu, and what would it do?                  |
 | Q4 | 9     | Expert field (30 columns) is wider than a phone screen: scale the window down, or scroll horizontally? |
-| Q5 | 6     | Supported browsers (proposal: latest Chrome, Edge, Firefox, Safari)?                     |
+| Q5 | 6     | ~~Supported browsers~~ — resolved by decision 33 |
 | Q6 | 7     | Keyboard / accessibility support beyond F2 — needed in v1?                               |
 | Q7 | 5     | ~~Desktop background~~ — resolved by decision 29                                         |
