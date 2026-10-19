@@ -62,7 +62,7 @@ owner first. Tick `[x]` when a task is done.
 - [x] Resolve Q5 (decision 33)
 - [x] SVG assets: mine, flag, “?”, crossed mine, smileys (4), LED digits 0–9 and minus, window buttons, icon
 - [x] Render field from core state (all cell states, number colours)
-- [ ] Render LED counter, timer, smiley
+- [x] Render LED counter, timer, smiley
 
 ## Stage 7 — Mouse input
 
