@@ -1,1 +1,19 @@
-// Entry point: 7-1 pattern partials are imported here (see docs/REQUIREMENTS.md).
+// Entry point, 7-1 pattern (see docs/REQUIREMENTS.md). Partials are grouped by folder.
+
+// base
+@use "base/reset";
+
+// layout
+@use "layout/desktop";
+
+// components
+@use "components/window";
+@use "components/menubar";
+@use "components/game";
+@use "components/led";
+@use "components/smiley";
+@use "components/field";
+@use "components/cell";
+
+// themes
+@use "themes/desktop-backgrounds";

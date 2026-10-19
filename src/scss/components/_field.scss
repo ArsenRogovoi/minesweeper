@@ -1,0 +1,7 @@
+@use "../abstracts" as *;
+
+.field {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), u($cell-size));
+  @include sunken($game-border);
+}

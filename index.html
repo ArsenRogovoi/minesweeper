@@ -6,7 +6,125 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="css/main.css" />
   </head>
-  <body>
+  <body class="desktop desktop--solid">
+    <div class="window">
+      <div class="window__titlebar">
+        <span class="window__icon" aria-hidden="true"></span>
+        <h1 class="window__title">Minesweeper</h1>
+        <span
+          class="window__button window__button--minimize"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="window__button window__button--maximize"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="window__button window__button--close"
+          aria-hidden="true"
+        ></span>
+      </div>
+      <nav class="menubar">
+        <span class="menubar__item">Game</span>
+        <span class="menubar__item">Help</span>
+      </nav>
+      <main class="game">
+        <div class="status">
+          <div class="led led--mines">
+            <span class="led__digit">0</span><span class="led__digit">1</span
+            ><span class="led__digit">0</span>
+          </div>
+          <button class="smiley" type="button" aria-label="New game"></button>
+          <div class="led led--timer">
+            <span class="led__digit">0</span><span class="led__digit">0</span
+            ><span class="led__digit">0</span>
+          </div>
+        </div>
+        <div class="field" style="--columns: 9">
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+          <div class="cell cell--closed"></div>
+        </div>
+      </main>
+    </div>
     <script type="module" src="src/js/main.js"></script>
   </body>
 </html>

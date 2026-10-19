@@ -1,0 +1,20 @@
+@use "../abstracts" as *;
+
+// Grey game area with the raised frame around the status panel and the field.
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: u($status-gap);
+  padding: u($game-padding);
+  background: $game-face;
+  @include raised($game-border);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: u($status-height);
+  padding: 0 u(5);
+  @include sunken(2);
+}

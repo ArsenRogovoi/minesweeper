@@ -1,0 +1,20 @@
+@use "../abstracts" as *;
+
+.led {
+  display: flex;
+  width: u($led-width);
+  height: u($led-height);
+  padding: u(1);
+  background: $led-off-bg;
+  @include sunken(1);
+}
+
+// Placeholder: red text until the SVG LED digits arrive in Stage 6.
+.led__digit {
+  display: grid;
+  place-items: center;
+  width: u($led-digit-width);
+  height: u($led-digit-height);
+  font: bold u(20) / 1 $font-led;
+  color: $led-on;
+}

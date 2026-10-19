@@ -1,0 +1,6 @@
+// The page is the "desktop"; the window sits in its centre.
+.desktop {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}

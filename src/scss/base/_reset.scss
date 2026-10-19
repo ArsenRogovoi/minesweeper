@@ -1,0 +1,31 @@
+@use "../abstracts" as *;
+
+// The unit behind every size: 1 px at scale x1, 2 px at scale x2.
+:root {
+  --u: 1px;
+}
+
+// High-density screens that are wide enough for the Expert field get the x2 window.
+@media (min-resolution: 2dppx) and (min-width: 1100px) {
+  :root {
+    --u: 2px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: $font-ui;
+  font-size: u(11);
+  user-select: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}

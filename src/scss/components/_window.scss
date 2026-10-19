@@ -1,0 +1,97 @@
+@use "../abstracts" as *;
+
+.window {
+  width: min-content; // as wide as the field: the title bar can shrink, the field cannot
+  display: flex;
+  flex-direction: column;
+  padding: 0 u($window-border) u($window-border);
+  background: $luna-frame;
+  border: u(1) solid $luna-frame-dark;
+  border-top: 0;
+  border-radius: u(8) u(8) 0 0;
+  box-shadow: 0 u(4) u(12) rgb(0 0 0 / 40%);
+}
+
+.window__titlebar {
+  display: flex;
+  align-items: center;
+  gap: u(4);
+  height: u($titlebar-height);
+  margin: 0 u(-$window-border);
+  padding: 0 u(5) 0 u(6);
+  border-radius: u(8) u(8) 0 0;
+  background: linear-gradient(
+    to bottom,
+    $luna-title-top 0%,
+    $luna-title-mid 12%,
+    $luna-frame 50%,
+    $luna-title-mid 88%,
+    $luna-title-bottom 100%
+  );
+}
+
+// Placeholder until the SVG window icon (Stage 6).
+.window__icon {
+  flex: none;
+  width: u(16);
+  height: u(16);
+  border-radius: 50%;
+  background: #222;
+}
+
+.window__title {
+  flex: 1;
+  min-width: 0;
+  contain: inline-size; // the title text does not widen the window: the field sets the width
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  font: bold u(13) $font-title;
+  color: #fff;
+  text-shadow: u(1) u(1) 0 $luna-title-shadow;
+  white-space: nowrap;
+}
+
+.window__button {
+  position: relative;
+  flex: none;
+  width: u($title-button-size);
+  height: u($title-button-size);
+  border: u(1) solid #fff;
+  border-radius: u(3);
+  background: linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
+
+  // glyph, drawn with borders until the SVG icons exist (Stage 6)
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+}
+
+.window__button--minimize::before {
+  inset: auto auto u(4) u(4);
+  width: u(8);
+  height: u(3);
+  background: #fff;
+}
+
+.window__button--maximize::before {
+  width: u(9);
+  height: u(9);
+  border: u(1) solid #fff;
+  border-top-width: u(3);
+}
+
+.window__button--close {
+  background: linear-gradient(135deg, #e9937c, #d1492b 60%, #b83116);
+
+  &::before {
+    width: u(11);
+    height: u(11);
+    background:
+      linear-gradient(45deg, transparent 43%, #fff 43% 57%, transparent 57%),
+      linear-gradient(-45deg, transparent 43%, #fff 43% 57%, transparent 57%);
+  }
+}

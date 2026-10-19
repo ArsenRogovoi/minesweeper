@@ -1,0 +1,15 @@
+@use "../abstracts" as *;
+
+.menubar {
+  display: flex;
+  height: u($menubar-height);
+  padding: u(1) u(2);
+  background: $luna-face;
+}
+
+.menubar__item {
+  padding: 0 u(7);
+  border: 0;
+  background: none;
+  cursor: default;
+}

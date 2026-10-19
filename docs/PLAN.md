@@ -51,9 +51,9 @@ owner first. Tick `[x]` when a task is done.
 ## Stage 5 — Static layout and styles
 
 - [x] Resolve Q7 (decision 29)
-- [ ] SCSS 7-1 structure with variables (colours, sizes)
-- [ ] Desktop background: solid XP colour and Bliss-like gradient, switched by a body class
-- [ ] Luna window frame with decorative buttons, menu bar, status panel, field container (static HTML)
+- [x] SCSS 7-1 structure with variables (colours, sizes)
+- [x] Desktop background: solid XP colour and Bliss-like gradient, switched by a body class
+- [x] Luna window frame with decorative buttons, menu bar, status panel, field container (static HTML)
 
 **Done when:** the static page looks like the XP window (owner reviews a screenshot).
 

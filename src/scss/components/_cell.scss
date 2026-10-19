@@ -1,0 +1,11 @@
+@use "../abstracts" as *;
+
+.cell {
+  width: u($cell-size);
+  height: u($cell-size);
+  background: $game-face;
+}
+
+.cell--closed {
+  @include raised(2);
+}

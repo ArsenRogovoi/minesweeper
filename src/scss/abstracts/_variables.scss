@@ -1,0 +1,51 @@
+// Colours and sizes. Sizes are plain numbers: the u() function turns them into
+// multiples of the --u unit, so the whole window scales with one CSS variable.
+
+// Windows XP "Luna" palette (our own approximation, no original artwork)
+$luna-frame: #0054e3;
+$luna-frame-dark: #0831d9;
+$luna-title-top: #3a8cff;
+$luna-title-mid: #0a5cf0;
+$luna-title-bottom: #0045c7;
+$luna-title-shadow: #0f1089;
+$luna-face: #ece9d8; // window and menu bar face
+
+// Classic grey game area
+$game-face: #c0c0c0;
+$bevel-light: #fff;
+$bevel-dark: #808080;
+$bevel-darkest: #404040;
+
+// LED counters
+$led-off-bg: #000;
+$led-on: #f00;
+
+// Desktop backgrounds
+$desktop-solid: #3a6ea5;
+$sky-top: #2a67c0;
+$sky-middle: #6da4e0;
+$sky-horizon: #bcd9f2;
+$hill-near: #4f8c1e;
+$hill-far: #6faa2e;
+
+// Fonts
+$font-ui: Tahoma, "Segoe UI", Verdana, sans-serif;
+$font-title: "Trebuchet MS", Tahoma, sans-serif;
+$font-led:
+  "Courier New", monospace; // placeholder until the SVG digits in Stage 6
+
+// Sizes (in --u units, 1 unit = 1 px at scale x1)
+$cell-size: 16;
+$window-border: 4;
+$titlebar-height: 30;
+$menubar-height: 20;
+$game-padding: 5;
+$game-border: 3;
+$status-height: 37;
+$status-gap: 6;
+$led-width: 41;
+$led-height: 25;
+$led-digit-width: 13;
+$led-digit-height: 23;
+$smiley-size: 26;
+$title-button-size: 21;

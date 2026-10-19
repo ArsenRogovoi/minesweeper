@@ -1,0 +1,16 @@
+@use "functions" as *;
+@use "variables" as *;
+
+// 3D borders like classic Windows controls.
+@mixin bevel($width, $top-left, $bottom-right) {
+  border: u($width) solid;
+  border-color: $top-left $bottom-right $bottom-right $top-left;
+}
+
+@mixin raised($width: 2) {
+  @include bevel($width, $bevel-light, $bevel-dark);
+}
+
+@mixin sunken($width: 2) {
+  @include bevel($width, $bevel-dark, $bevel-light);
+}

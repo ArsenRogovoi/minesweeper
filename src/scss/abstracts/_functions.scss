@@ -1,0 +1,5 @@
+// Converts a plain number into a length that follows the --u unit,
+// e.g. u(16) -> calc(16 * var(--u)).
+@function u($n) {
+  @return calc(#{$n} * var(--u));
+}

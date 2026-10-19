@@ -1,0 +1,16 @@
+@use "../abstracts" as *;
+
+.smiley {
+  width: u($smiley-size);
+  height: u($smiley-size);
+  padding: 0;
+  background: $game-face;
+  border: u(1) solid $bevel-dark;
+  box-shadow:
+    inset u(1) u(1) 0 $bevel-light,
+    inset u(-1) u(-1) 0 $bevel-dark;
+
+  &:active {
+    box-shadow: none;
+  }
+}
