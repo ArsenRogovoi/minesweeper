@@ -57,3 +57,9 @@
     color: $color;
   }
 }
+
+// Keyboard cursor: a dotted frame inside the cell, only while the field is focused with the keyboard.
+.field:focus-visible .cell--cursor {
+  outline: u(1) dotted #000;
+  outline-offset: u(-3);
+}

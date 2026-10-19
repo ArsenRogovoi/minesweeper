@@ -9,10 +9,13 @@ const STATE_CLASSES = {
   wrongFlag: ["cell--open", "cell--wrong-flag"],
 };
 
-function classNameFor({ state, adjacent }, pressed) {
+function classNameFor({ state, adjacent }, { pressed, cursor }) {
   const classes = ["cell", ...STATE_CLASSES[state]];
   if (pressed) {
     classes.push("cell--pressed");
+  }
+  if (cursor) {
+    classes.push("cell--cursor");
   }
   if (state === "open" && adjacent > 0) {
     classes.push(`cell--n${adjacent}`);
@@ -31,8 +34,10 @@ function textFor({ state, adjacent }) {
  * @param {HTMLElement} container element with the `field` grid styles
  * @returns {{
  *   render: (snapshot: import("../core/game.js").Snapshot) => void,
- *   setPressed: (indices: number[]) => void
- * }} `setPressed` gives cells the look of a held-down button (Stage 7)
+ *   setPressed: (indices: number[]) => void,
+ *   setCursor: (index: number|null) => void
+ * }} `setPressed` gives cells the look of a held-down button; `setCursor` marks the
+ *   cell of the keyboard cursor
  */
 export function createFieldRenderer(container) {
   let width = 0;
@@ -40,6 +45,7 @@ export function createFieldRenderer(container) {
   let cellElements = [];
   let cells = [];
   let pressed = new Set();
+  let cursor = null;
 
   function rebuild(newWidth, newHeight) {
     width = newWidth;
@@ -56,7 +62,10 @@ export function createFieldRenderer(container) {
 
   function update(index) {
     const element = cellElements[index];
-    const className = classNameFor(cells[index], pressed.has(index));
+    const className = classNameFor(cells[index], {
+      pressed: pressed.has(index),
+      cursor: cursor === index,
+    });
     if (element.className !== className) {
       element.className = className;
     }
@@ -73,6 +82,12 @@ export function createFieldRenderer(container) {
       }
       cells = snapshot.cells;
       cells.forEach((_, index) => update(index));
+    },
+
+    setCursor(index) {
+      const previous = cursor;
+      cursor = index;
+      [previous, index].filter((i) => cells[i]).forEach(update);
     },
 
     setPressed(indices) {

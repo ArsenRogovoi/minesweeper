@@ -140,4 +140,45 @@ describe("startApp", () => {
       expect(digits(".led--timer")).toBe("000");
     });
   });
+
+  describe("keyboard", () => {
+    const field = () => document.querySelector(".field");
+    const press = (code, key = code) =>
+      field().dispatchEvent(
+        new KeyboardEvent("keydown", {
+          code,
+          key,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+
+    it("shows the cursor on the first cell", () => {
+      expect(cell(0).classList.contains("cell--cursor")).toBe(true);
+    });
+
+    it("moves the cursor with the arrow keys", () => {
+      press("ArrowRight");
+      press("ArrowDown");
+      expect(cell(0).classList.contains("cell--cursor")).toBe(false);
+      expect(cell(10).classList.contains("cell--cursor")).toBe(true);
+    });
+
+    it("opens the cell under the cursor with Space and flags it with F", () => {
+      for (let i = 0; i < 8; i++) press("ArrowDown");
+      for (let i = 0; i < 8; i++) press("ArrowRight");
+      press("Space", " ");
+      expect(cell(80).classList.contains("cell--open")).toBe(true);
+      press("ArrowLeft");
+      press("KeyF", "f");
+      expect(digits(".led--mines")).toBe("010"); // cell 79 is already open: no flag
+    });
+
+    it("puts the cursor back on the first cell after a new game", () => {
+      press("ArrowRight");
+      app.game.newGame();
+      expect(cell(0).classList.contains("cell--cursor")).toBe(true);
+      expect(cell(1).classList.contains("cell--cursor")).toBe(false);
+    });
+  });
 });

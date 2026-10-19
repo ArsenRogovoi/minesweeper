@@ -5,3 +5,8 @@
   grid-template-columns: repeat(var(--columns), u($cell-size));
   @include sunken($game-border);
 }
+
+// The keyboard cursor (.cell--cursor) is the focus indicator, so no outline on the field itself.
+.field:focus {
+  outline: none;
+}

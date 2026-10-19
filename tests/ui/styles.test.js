@@ -31,6 +31,7 @@ describe("SCSS", () => {
     ".cell",
     ".cell--closed",
     ".cell--pressed",
+    ".cell--cursor",
   ])("styles %s", (selector) => {
     expect(css).toContain(selector);
   });

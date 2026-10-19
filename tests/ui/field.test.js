@@ -206,3 +206,45 @@ describe("field renderer: pressed cells", () => {
     expect(container.querySelectorAll(".cell--pressed")).toHaveLength(0);
   });
 });
+
+describe("field renderer: keyboard cursor", () => {
+  it("marks one cell as the cursor and moves it", () => {
+    renderer.render(gameWithMines(CORNER_MINE).getSnapshot());
+    renderer.setCursor(5);
+    expect(classesOf(5)).toEqual(["cell", "cell--closed", "cell--cursor"]);
+    renderer.setCursor(6);
+    expect(classesOf(5)).toEqual(["cell", "cell--closed"]);
+    expect(classesOf(6)).toEqual(["cell", "cell--closed", "cell--cursor"]);
+  });
+
+  it("removes the cursor for null", () => {
+    renderer.render(gameWithMines(CORNER_MINE).getSnapshot());
+    renderer.setCursor(5);
+    renderer.setCursor(null);
+    expect(container.querySelectorAll(".cell--cursor")).toHaveLength(0);
+  });
+
+  it("keeps the cursor on an opened cell and through renders", () => {
+    const game = gameWithMines(CORNER_MINE);
+    renderer.render(game.getSnapshot());
+    renderer.setCursor(5);
+    game.open(5);
+    renderer.render(game.getSnapshot());
+    expect(classesOf(5)).toEqual([
+      "cell",
+      "cell--cursor",
+      "cell--n1",
+      "cell--open",
+    ]);
+  });
+
+  it("can be set before the first render and survives a rebuild", () => {
+    renderer.setCursor(0);
+    const game = gameWithMines(CORNER_MINE);
+    renderer.render(game.getSnapshot());
+    expect(classesOf(0)).toContain("cell--cursor");
+    game.newGame({ width: 9, height: 9, mines: 10 });
+    renderer.render(game.getSnapshot());
+    expect(classesOf(0)).toContain("cell--cursor");
+  });
+});

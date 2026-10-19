@@ -70,6 +70,10 @@ describe("index.html layout", () => {
     expect(field.children).toHaveLength(0);
   });
 
+  it("lets the field take the keyboard focus (keyboard play)", () => {
+    expect($(".field").getAttribute("tabindex")).toBe("0");
+  });
+
   it("loads the compiled CSS and the entry script", () => {
     expect($('link[rel="stylesheet"]').getAttribute("href")).toBe(
       "css/main.css",

@@ -71,7 +71,7 @@ owner first. Tick `[x]` when a task is done.
 - [x] Right click mark cycle; context menu disabled on the field
 - [x] Chord via both buttons or middle button, with neighbour feedback
 - [x] Smiley reactions; smiley click and F2 start a new game
-- [ ] Keyboard (decision 34): arrows move a cursor, Space opens / chords, F cycles flag and “?”
+- [x] Keyboard (decision 34): arrows move a cursor, Space opens / chords, F cycles flag and “?”
 
 **Done when:** a full game can be played with the mouse (and the keyboard) at all three levels.
 
