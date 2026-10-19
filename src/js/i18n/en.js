@@ -21,5 +21,6 @@ export default {
   "dialog.custom.width": "Width:",
   "dialog.custom.mines": "Mines:",
   "dialog.ok": "OK",
+  "dialog.close": "Close",
   "dialog.cancel": "Cancel",
 };

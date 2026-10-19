@@ -52,6 +52,8 @@
 
 .window__button {
   flex: none;
+  padding: 0; // also used on <button> in dialogs
+  cursor: default;
   width: u($title-button-size);
   height: u($title-button-size);
   border: u(1) solid #fff;

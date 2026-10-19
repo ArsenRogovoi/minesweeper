@@ -83,7 +83,7 @@ owner first. Tick `[x]` when a task is done.
 - [x] Wire settings and i18n into the page: load settings at start, window title / language texts, desktop
       background class
 - [x] Game menu: New (F2), levels, Marks (?), Language and Background submenus; save every change
-- [ ] Dialog component (XP style, modal) and the Custom field dialog with validation and clamping
+- [x] Dialog component (XP style, modal) and the Custom field dialog with validation and clamping
 - [ ] Help menu: About and Rules dialogs (decision 35)
 
 ## Stage 9 — Touch

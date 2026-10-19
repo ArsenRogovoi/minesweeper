@@ -21,5 +21,6 @@ export default {
   "dialog.custom.width": "Ширина:",
   "dialog.custom.mines": "Число мин:",
   "dialog.ok": "OK",
+  "dialog.close": "Закрыть",
   "dialog.cancel": "Отмена",
 };

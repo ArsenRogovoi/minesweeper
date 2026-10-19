@@ -5,6 +5,7 @@ import ru from "../i18n/ru.js";
 import { createI18n, detectLanguage } from "../services/i18n.js";
 import { createSettingsStore, levelConfig } from "../services/settings.js";
 import { createControls } from "./controls.js";
+import { openCustomDialog } from "./custom-dialog.js";
 import { createFieldRenderer } from "./field.js";
 import { createKeyboardInput } from "./keyboard.js";
 import { createMenuBar } from "./menu.js";
@@ -117,6 +118,18 @@ export function startApp({
     setBackground(background) {
       updateSettings({ background });
       applyBackground(document, background);
+    },
+    customField() {
+      openCustomDialog({
+        document,
+        t: i18n.t,
+        current: settings.custom,
+        onSubmit(custom) {
+          updateSettings({ level: "custom", custom });
+          game.newGame(levelConfig(settings));
+          menuBar.render(); // the dialog closes after the menu action, so refresh the check marks
+        },
+      });
     },
   };
 

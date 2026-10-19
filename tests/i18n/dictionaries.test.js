@@ -46,6 +46,7 @@ describe("dictionaries", () => {
       "dialog.custom.mines",
       "dialog.ok",
       "dialog.cancel",
+      "dialog.close",
     ];
     for (const key of required) {
       expect(ru, key).toHaveProperty([key]);

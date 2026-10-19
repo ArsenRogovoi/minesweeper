@@ -1,0 +1,84 @@
+@use "../abstracts" as *;
+
+// Modal dialog: a small window centred over the page. The page behind is inert.
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+}
+
+.dialog {
+  width: max-content;
+  max-width: 100vw;
+  box-shadow: u(4) u(6) u(16) rgb(0 0 0 / 50%);
+}
+
+.dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: u(14);
+  padding: u(12) u(14);
+  background: $luna-face;
+}
+
+.dialog__fields {
+  display: flex;
+  flex-direction: column;
+  gap: u(6);
+}
+
+.dialog__field {
+  display: flex;
+  align-items: center;
+  gap: u(10);
+
+  label {
+    flex: 1;
+    min-width: u(70);
+  }
+
+  input {
+    width: u(60);
+    padding: u(2) u(3);
+    border: u(1) solid $dialog-input-border;
+    font: inherit;
+  }
+}
+
+.dialog__text {
+  max-width: u(320);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dialog__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: u(8);
+}
+
+.dialog__button {
+  min-width: u(75);
+  height: u(23);
+  padding: 0 u(8);
+  border: u(1) solid $dialog-button-border;
+  border-radius: u(3);
+  background: linear-gradient(to bottom, #fff, $luna-face 85%, #d6d0c5);
+  cursor: default;
+
+  &:active {
+    background: linear-gradient(to bottom, #d6d0c5, $luna-face);
+  }
+
+  &:focus-visible {
+    outline: u(1) dotted #000;
+    outline-offset: u(-4);
+  }
+}
+
+// The default button has a blue inner frame.
+.dialog__button--primary {
+  box-shadow: inset 0 0 0 u(2) $dialog-button-default;
+}

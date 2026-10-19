@@ -401,4 +401,97 @@ describe("startApp", () => {
       expect(document.querySelector(".menubar__menu--open")).toBeNull();
     });
   });
+
+  describe("Custom field dialog", () => {
+    const storage = () => {
+      const data = { value: null };
+      return {
+        getItem: () => data.value,
+        setItem: (_k, v) => {
+          data.value = v;
+        },
+        saved: () => JSON.parse(data.value),
+      };
+    };
+    const openDialogFromMenu = () => {
+      document.querySelector('[data-menu="game"] > .menubar__item').click();
+      document.querySelector('.menu__item[data-item="custom"]').click();
+    };
+    const input = (name) =>
+      document.querySelector(`.dialog input[name="${name}"]`);
+    let store;
+
+    beforeEach(() => {
+      store = storage();
+      app = start({ storage: store, random: () => 0.5 });
+    });
+
+    it("opens from the Game menu with the saved custom values", () => {
+      openDialogFromMenu();
+      expect(document.querySelector(".dialog")).not.toBeNull();
+      expect(input("height").value).toBe("9");
+      expect(input("mines").value).toBe("10");
+    });
+
+    it("starts a custom game on OK and saves it", () => {
+      openDialogFromMenu();
+      input("height").value = "10";
+      input("width").value = "12";
+      input("mines").value = "20";
+      document.querySelector(".dialog__button--primary").click();
+      expect(document.querySelectorAll(".cell")).toHaveLength(120);
+      expect(digits(".led--mines")).toBe("020");
+      expect(store.saved()).toMatchObject({
+        level: "custom",
+        custom: { width: 12, height: 10, mines: 20 },
+      });
+      expect(document.querySelector(".dialog")).toBeNull();
+    });
+
+    it("clamps what was typed", () => {
+      openDialogFromMenu();
+      input("height").value = "500";
+      input("width").value = "500";
+      input("mines").value = "5000";
+      document.querySelector(".dialog__button--primary").click();
+      expect(document.querySelectorAll(".cell")).toHaveLength(30 * 24);
+      expect(store.saved().custom).toEqual({
+        width: 30,
+        height: 24,
+        mines: 667,
+      });
+    });
+
+    it("keeps the current game when the dialog is cancelled", () => {
+      app.game.open(80);
+      openDialogFromMenu();
+      document.querySelector(".window__button--close").click();
+      expect(app.game.getSnapshot().state).not.toBe("ready");
+      expect(store.saved()).toBeNull();
+    });
+
+    it("checks Custom in the menu and remembers the values for next time", () => {
+      openDialogFromMenu();
+      input("height").value = "10";
+      input("width").value = "12";
+      input("mines").value = "20";
+      document.querySelector(".dialog__button--primary").click();
+      document.querySelector('[data-menu="game"] > .menubar__item').click();
+      expect(
+        document
+          .querySelector('.menu__item[data-item="custom"]')
+          .classList.contains("menu__item--checked"),
+      ).toBe(true);
+      app = start({ storage: store, random: () => 0.5 });
+      expect(document.querySelectorAll(".cell")).toHaveLength(120);
+    });
+
+    it("is translated", () => {
+      app.i18n.setLanguage("ru");
+      openDialogFromMenu();
+      expect(document.querySelector(".dialog .window__title").textContent).toBe(
+        "Особое поле",
+      );
+    });
+  });
 });

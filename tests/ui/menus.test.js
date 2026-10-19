@@ -14,6 +14,7 @@ beforeEach(() => {
     toggleMarks: vi.fn(),
     setLanguage: vi.fn(),
     setBackground: vi.fn(),
+    customField: vi.fn(),
   };
   settings = {
     level: "beginner",
@@ -45,6 +46,7 @@ describe("Game menu", () => {
       "Beginner",
       "Intermediate",
       "Expert",
+      "Custom…",
       "Marks (?)",
       "Language",
       "Background",
@@ -59,6 +61,7 @@ describe("Game menu", () => {
       "beginner",
       "intermediate",
       "expert",
+      "custom",
       "-",
       "marks",
       "-",
@@ -73,6 +76,7 @@ describe("Game menu", () => {
       "Новичок",
       "Любитель",
       "Профессионал",
+      "Особые…",
       "Метки (?)",
       "Язык",
       "Фон",
@@ -104,6 +108,20 @@ describe("Game menu: levels", () => {
   it.each(["beginner", "intermediate", "expert"])("selects %s", (level) => {
     find(gameMenu().items, level).action();
     expect(actions.setLevel).toHaveBeenCalledWith(level);
+  });
+});
+
+describe("Game menu: Custom", () => {
+  it("is checked only when the custom level is current", () => {
+    expect(Boolean(find(gameMenu().items, "custom").checked)).toBe(false);
+    settings.level = "custom";
+    expect(find(gameMenu().items, "custom").checked).toBe(true);
+    expect(Boolean(find(gameMenu().items, "beginner").checked)).toBe(false);
+  });
+
+  it("opens the custom field dialog", () => {
+    find(gameMenu().items, "custom").action();
+    expect(actions.customField).toHaveBeenCalledTimes(1);
   });
 });
 

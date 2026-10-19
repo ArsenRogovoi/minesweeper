@@ -10,7 +10,8 @@
  *     setLevel: (level: "beginner"|"intermediate"|"expert") => void,
  *     toggleMarks: () => void,
  *     setLanguage: (language: "ru"|"en") => void,
- *     setBackground: (background: "solid"|"gradient") => void
+ *     setBackground: (background: "solid"|"gradient") => void,
+ *     customField: () => void
  *   }
  * }} options
  * @returns {import("./menu.js").MenuModel[]}
@@ -38,6 +39,12 @@ export function buildMenus({ t, settings, actions }) {
         level("beginner"),
         level("intermediate"),
         level("expert"),
+        {
+          id: "custom",
+          label: t("game.custom"),
+          checked: settings.level === "custom",
+          action: actions.customField,
+        },
         { separator: true },
         {
           id: "marks",
