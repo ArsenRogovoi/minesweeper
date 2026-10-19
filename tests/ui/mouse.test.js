@@ -213,3 +213,99 @@ describe("mouse: left button", () => {
     expect(feedback).toHaveLength(1);
   });
 });
+
+describe("mouse: right button", () => {
+  it("cycles flag, question mark and closed, one step per press", () => {
+    const seen = [];
+    for (let i = 0; i < 3; i++) {
+      mouse.down(cell(6), 2);
+      mouse.up(cell(6), 2);
+      seen.push(stateOf(6));
+    }
+    expect(seen).toEqual(["flag", "question", "closed"]);
+  });
+
+  it("marks the cell on press, not on release", () => {
+    mouse.down(cell(6), 2);
+    expect(stateOf(6)).toBe("flag");
+    mouse.up(cell(6), 2);
+    expect(stateOf(6)).toBe("flag");
+  });
+
+  it("does not start the game or open anything", () => {
+    mouse.down(cell(6), 2);
+    mouse.up(cell(6), 2);
+    expect(game.getSnapshot().state).toBe("ready");
+  });
+
+  it("shows no pressed cell, but the surprised smiley while the button is held", () => {
+    mouse.down(cell(6), 2);
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: true });
+    mouse.up(cell(6), 2);
+    expect(lastFeedback()).toEqual({ pressedCells: [], pressing: false });
+  });
+
+  it("does nothing on an opened cell", () => {
+    game.open(6);
+    mouse.down(cell(6), 2);
+    expect(stateOf(6)).toBe("open");
+  });
+
+  it("does not mark while the left button is held", () => {
+    mouse.down(cell(6));
+    mouse.down(cell(6), 2);
+    expect(stateOf(6)).toBe("closed");
+    mouse.up(cell(6), 2);
+    mouse.up(cell(6));
+    expect(stateOf(6)).toBe("closed");
+  });
+
+  it("does not move the mark when the pointer moves with the button held", () => {
+    mouse.down(cell(6), 2);
+    mouse.move(cell(8));
+    mouse.up(cell(8), 2);
+    expect(stateOf(6)).toBe("flag");
+    expect(stateOf(8)).toBe("closed");
+  });
+
+  it("is ignored after the game is over", () => {
+    game.open(2);
+    mouse.down(cell(8), 2);
+    expect(stateOf(8)).toBe("closed");
+  });
+
+  it("is ignored outside the field", () => {
+    mouse.down(document.getElementById("outside"), 2);
+    expect(feedback).toEqual([]);
+  });
+});
+
+describe("mouse: context menu", () => {
+  it("is disabled on the field", () => {
+    const event = new MouseEvent("contextmenu", {
+      bubbles: true,
+      cancelable: true,
+    });
+    cell(6).dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("is left alone outside the field", () => {
+    const event = new MouseEvent("contextmenu", {
+      bubbles: true,
+      cancelable: true,
+    });
+    document.getElementById("outside").dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it("is no longer disabled after destroy()", () => {
+    input.destroy();
+    const event = new MouseEvent("contextmenu", {
+      bubbles: true,
+      cancelable: true,
+    });
+    cell(6).dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+  });
+});
