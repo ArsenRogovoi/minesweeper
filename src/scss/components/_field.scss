@@ -4,6 +4,10 @@
   display: grid;
   grid-template-columns: repeat(var(--columns), u($cell-size));
   @include sunken($game-border);
+  // Touch: the finger must not scroll or zoom the page, select text or open the callout menu.
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 // The keyboard cursor (.cell--cursor) is the focus indicator, so no outline on the field itself.

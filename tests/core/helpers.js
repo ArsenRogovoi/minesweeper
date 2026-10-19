@@ -32,7 +32,7 @@ export function recordEvents(game) {
 }
 
 /**
- * Manual replacement for setInterval / clearInterval.
+ * Manual replacement for setInterval / clearInterval / setTimeout / clearTimeout.
  * `advance(ms)` runs the due callbacks in time order.
  */
 export function createFakeScheduler() {
@@ -49,17 +49,35 @@ export function createFakeScheduler() {
     clearInterval(handle) {
       intervals.delete(handle);
     },
+    setTimeout(callback, delay) {
+      const handle = nextHandle++;
+      intervals.set(handle, {
+        callback,
+        every: delay,
+        next: now + delay,
+        once: true,
+      });
+      return handle;
+    },
+    clearTimeout(handle) {
+      intervals.delete(handle);
+    },
     advance(ms) {
       const target = now + ms;
       for (;;) {
-        const due = [...intervals.values()]
-          .filter((interval) => interval.next <= target)
-          .sort((a, b) => a.next - b.next)[0];
+        const [handle, due] =
+          [...intervals.entries()]
+            .filter(([, interval]) => interval.next <= target)
+            .sort(([, a], [, b]) => a.next - b.next)[0] ?? [];
         if (!due) {
           break;
         }
         now = due.next;
-        due.next += due.every;
+        if (due.once) {
+          intervals.delete(handle);
+        } else {
+          due.next += due.every;
+        }
         due.callback();
       }
       now = target;

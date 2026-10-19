@@ -90,8 +90,8 @@ owner first. Tick `[x]` when a task is done.
 
 - [x] Resolve Q4 (decision 37)
 - [x] Scale the window down to the screen width (`--fit`)
-- [ ] Tap = open, long press = mark cycle, tap on number = chord
-- [ ] No context menu / text selection / accidental zoom on the field
+- [x] Tap = open, long press = mark cycle, tap on number = chord
+- [x] No context menu / text selection / accidental zoom on the field
 
 ## Stage 10 — Polish and review
 

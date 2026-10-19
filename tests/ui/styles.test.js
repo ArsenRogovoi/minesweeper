@@ -67,6 +67,13 @@ describe("SCSS", () => {
     );
   });
 
+  it("keeps the finger on the field from scrolling, zooming or selecting (decision 14)", () => {
+    expect(css).toMatch(/\.field\s*{[^}]*touch-action:\s*none/);
+    expect(css).toMatch(/\.field\s*{[^}]*-webkit-touch-callout:\s*none/);
+    expect(css).toMatch(/body\s*{[^}]*user-select:\s*none/);
+    expect(css).toMatch(/body\s*{[^}]*touch-action:\s*manipulation/);
+  });
+
   it("sizes the cell as 16 units", () => {
     expect(css).toMatch(/\.cell\s*{[^}]*width:\s*calc\(16 \* var\(--u\)\)/);
     expect(css).toMatch(/\.cell\s*{[^}]*height:\s*calc\(16 \* var\(--u\)\)/);

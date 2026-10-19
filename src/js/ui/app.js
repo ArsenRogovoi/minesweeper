@@ -15,6 +15,7 @@ import { buildMenus } from "./menus.js";
 import { createMouseInput } from "./mouse.js";
 import { createStatusRenderer } from "./status.js";
 import { applyBackground, applyTexts } from "./texts.js";
+import { createTouchInput } from "./touch.js";
 
 /**
  * Wires the game, the timer and the renderers to the page.
@@ -23,7 +24,7 @@ import { applyBackground, applyTexts } from "./texts.js";
  * @param {{
  *   document: Document,
  *   random: () => number,
- *   scheduler: {setInterval: Function, clearInterval: Function},
+ *   scheduler: {setInterval: Function, clearInterval: Function, setTimeout: Function, clearTimeout: Function},
  *   storage?: {getItem: Function, setItem: Function} | null,
  *   browserLanguage?: string
  * }} options `storage` is localStorage (or null), `browserLanguage` is navigator.language
@@ -31,6 +32,7 @@ import { applyBackground, applyTexts } from "./texts.js";
  *   game: ReturnType<typeof createGame>,
  *   timer: ReturnType<typeof createTimer>,
  *   mouse: ReturnType<typeof createMouseInput>,
+ *   touch: ReturnType<typeof createTouchInput>,
  *   keyboard: ReturnType<typeof createKeyboardInput>,
  *   controls: ReturnType<typeof createControls>,
  *   i18n: ReturnType<typeof createI18n>,
@@ -78,18 +80,27 @@ export function startApp({
   function render(snapshot) {
     field.render(snapshot);
     status.renderMines(snapshot.minesLeft);
-    status.renderSmiley(snapshot.state, mouse.isPressing());
+    status.renderSmiley(snapshot.state, isPressing());
   }
 
+  function onFeedback({ pressedCells, pressing }) {
+    field.setPressed(pressedCells);
+    status.renderSmiley(game.getSnapshot().state, pressing);
+  }
   const mouse = createMouseInput({
     document,
     field: fieldElement,
     game,
-    onFeedback({ pressedCells, pressing }) {
-      field.setPressed(pressedCells);
-      status.renderSmiley(game.getSnapshot().state, pressing);
-    },
+    onFeedback,
   });
+  const touch = createTouchInput({
+    document,
+    field: fieldElement,
+    game,
+    scheduler,
+    onFeedback,
+  });
+  const isPressing = () => mouse.isPressing() || touch.isPressing();
 
   const keyboard = createKeyboardInput({
     field: fieldElement,
@@ -157,5 +168,5 @@ export function startApp({
   render(game.getSnapshot());
   status.renderTimer(timer.getSeconds());
 
-  return { game, timer, mouse, keyboard, controls, i18n, menuBar };
+  return { game, timer, mouse, touch, keyboard, controls, i18n, menuBar };
 }

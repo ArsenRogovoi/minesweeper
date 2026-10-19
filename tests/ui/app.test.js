@@ -527,6 +527,38 @@ describe("startApp", () => {
     });
   });
 
+  describe("touch", () => {
+    const touch = (type, element) =>
+      element.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 1,
+        }),
+      );
+
+    it("opens a cell on a tap", () => {
+      touch("pointerdown", cell(80));
+      touch("pointerup", cell(80));
+      expect(app.game.getSnapshot().cells[80].state).toBe("open");
+    });
+
+    it("places a flag after a long press (400 ms)", () => {
+      touch("pointerdown", cell(80));
+      scheduler.advance(400);
+      touch("pointerup", cell(80));
+      expect(app.game.getSnapshot().cells[80].state).toBe("flag");
+      expect(digits(".led--mines")).toBe("009");
+    });
+
+    it("shows the surprised smiley while the finger is down", () => {
+      touch("pointerdown", cell(80));
+      expect(smiley()).toBe("smiley smiley--surprised");
+      touch("pointerup", cell(80));
+      expect(smiley()).not.toContain("surprised");
+    });
+  });
+
   describe("narrow screens", () => {
     const fitValue = () =>
       document.documentElement.style.getPropertyValue("--fit");

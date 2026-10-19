@@ -44,6 +44,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 35 | Help menu            | Resolves Q2. Two items: “About” (small XP-style window: name, version, “learning clone of Windows XP Minesweeper”) and “Rules” (short RU/EN text on the rules and the controls: mouse, keyboard, touch) (2026-10-19) |
 | 36 | Exit item            | Resolves Q3. No “Exit” item in the Game menu: a page cannot close its own tab (2026-10-19) |
 | 37 | Narrow screens      | Resolves Q4. The whole window is scaled down to fit the screen width (never up), through the same `--u` unit as decision 30: `--u = base unit × --fit`; `--fit` is set by JS at start, on a new game and on resize. No horizontal scroll (2026-10-19) |
+| 38 | Long press          | Agreed P5: 400 ms, one constant (`LONG_PRESS_MS` in `src/js/ui/touch.js`). The mark is placed as soon as the time is up. Touch and pen pointers use `touch.js`; sliding to another cell cancels the gesture (2026-10-19) |
 
 ## Proposed (need confirmation)
 
@@ -51,7 +52,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | -- | ----------------------- | ------------------------------------------------------------------------------------- |
 | P1 | ~~Node.js in WSL~~      | ~~Install via nvm, Node 22 LTS~~ — superseded by decision 23                          |
 | P7 | ~~Default background~~  | ~~Solid XP colour~~ — agreed as decision 31                                           |
-| P5 | Long-press duration     | 400 ms, defined as a single constant                                                  |
+| P5 | ~~Long-press duration~~ | ~~400 ms~~ — agreed as decision 38                                                    |
 | P6 | ~~Cell size~~          | ~~16 × 16 px as in XP, whole window scaled ×2 on high-DPI / via CSS variable~~ — agreed as decision 30 |
 
 ## Open questions (to be answered before the related stage)
