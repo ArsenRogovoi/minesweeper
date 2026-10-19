@@ -1,0 +1,21 @@
+/** English UI texts. Keep the keys identical to ru.js (a test checks it). */
+export default {
+  "window.title": "Minesweeper",
+  "menu.game": "Game",
+  "menu.help": "Help",
+  "game.new": "New",
+  "game.beginner": "Beginner",
+  "game.intermediate": "Intermediate",
+  "game.expert": "Expert",
+  "game.custom": "Custom…",
+  "game.marks": "Marks (?)",
+  "game.language": "Language",
+  "language.ru": "Русский",
+  "language.en": "English",
+  "dialog.custom.title": "Custom Field",
+  "dialog.custom.height": "Height:",
+  "dialog.custom.width": "Width:",
+  "dialog.custom.mines": "Mines:",
+  "dialog.ok": "OK",
+  "dialog.cancel": "Cancel",
+};

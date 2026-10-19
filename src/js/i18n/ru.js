@@ -1,0 +1,21 @@
+/** Russian UI texts. Keep the keys identical to en.js (a test checks it). */
+export default {
+  "window.title": "Сапёр",
+  "menu.game": "Игра",
+  "menu.help": "Справка",
+  "game.new": "Новая игра",
+  "game.beginner": "Новичок",
+  "game.intermediate": "Любитель",
+  "game.expert": "Профессионал",
+  "game.custom": "Особые…",
+  "game.marks": "Метки (?)",
+  "game.language": "Язык",
+  "language.ru": "Русский",
+  "language.en": "English",
+  "dialog.custom.title": "Особое поле",
+  "dialog.custom.height": "Высота:",
+  "dialog.custom.width": "Ширина:",
+  "dialog.custom.mines": "Число мин:",
+  "dialog.ok": "OK",
+  "dialog.cancel": "Отмена",
+};
