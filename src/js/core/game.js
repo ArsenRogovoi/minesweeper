@@ -1,4 +1,4 @@
-import { createBoard } from "./board.js";
+import { createBoard, getNeighbors } from "./board.js";
 import { createEmitter } from "./emitter.js";
 import { LEVELS } from "./levels.js";
 
@@ -60,6 +60,21 @@ export function createGame({ random, config = LEVELS.beginner }) {
     return Number.isInteger(index) && index >= 0 && index < cellStates.length;
   }
 
+  /** Opens `start` and, through cells with no adjacent mines, everything reachable. */
+  function revealFrom(start) {
+    const pending = [start];
+    while (pending.length > 0) {
+      const index = pending.pop();
+      if (cellStates[index] !== "closed") {
+        continue;
+      }
+      cellStates[index] = "open";
+      if (board.cells[index].adjacent === 0) {
+        pending.push(...getNeighbors(board.width, board.height, index));
+      }
+    }
+  }
+
   reset(config);
 
   return {
@@ -72,12 +87,12 @@ export function createGame({ random, config = LEVELS.beginner }) {
       emit("new");
     },
 
-    /** Opens a closed cell. */
+    /** Opens a closed cell; an empty cell (0) opens its neighbours too. */
     open(index) {
-      if (!isValidIndex(index)) {
+      if (!isValidIndex(index) || cellStates[index] !== "closed") {
         return;
       }
-      cellStates[index] = "open";
+      revealFrom(index);
       if (state === "ready") {
         state = "playing";
         emit("start");
