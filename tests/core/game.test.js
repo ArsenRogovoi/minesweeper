@@ -602,3 +602,38 @@ describe("mine counter", () => {
     expect(minesLeft(game)).toBe(1);
   });
 });
+
+describe("UI contract", () => {
+  it("returns a fresh snapshot each time, so changing one does not affect the game", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const snapshot = game.getSnapshot();
+    snapshot.cells[3].state = "open";
+    snapshot.state = "won";
+    expect(game.getSnapshot().cells[3].state).toBe("closed");
+    expect(game.getSnapshot().state).toBe("ready");
+  });
+
+  it("keeps earlier snapshots unchanged when the game moves on", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const before = game.getSnapshot();
+    game.toggleMark(3);
+    expect(before.cells[3].state).toBe("closed");
+    expect(before.minesLeft).toBe(1);
+  });
+
+  it("delivers events to all listeners in order", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const first = recordEvents(game);
+    const second = recordEvents(game);
+    game.toggleMark(3);
+    game.open(5);
+    expect(first.map((e) => e.type)).toEqual(["change", "start"]);
+    expect(second).toEqual(first);
+  });
+
+  it("allows the first click on a mine (no first-click protection)", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(0);
+    expect(game.getSnapshot().state).toBe("lost");
+  });
+});

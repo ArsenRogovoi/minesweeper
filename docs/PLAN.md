@@ -33,7 +33,7 @@ owner first. Tick `[x]` when a task is done.
 - [x] Chord: opens neighbours only when flag count matches; wrong flags lead to loss
 - [x] Win detection with auto-flagging; loss with exploded mine, revealed mines, wrong flags
 - [x] Mine counter (can be negative)
-- [ ] Event / snapshot API for the UI
+- [x] Event / snapshot API for the UI
 
 **Done when:** every rule in REQUIREMENTS §1.2 has a test.
 
