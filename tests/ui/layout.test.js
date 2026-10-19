@@ -64,14 +64,10 @@ describe("index.html layout", () => {
     expect($$(".led--timer .led__digit")).toHaveLength(3);
   });
 
-  it("has a Beginner-sized field container with 81 closed cells", () => {
+  it("has an empty field container: the cells are rendered from the game state", () => {
     const field = $(".field");
-    expect(field.style.getPropertyValue("--columns")).toBe("9");
-    const cells = $$(".field .cell");
-    expect(cells).toHaveLength(81);
-    expect(cells.every((cell) => cell.classList.contains("cell--closed"))).toBe(
-      true,
-    );
+    expect(field).not.toBeNull();
+    expect(field.children).toHaveLength(0);
   });
 
   it("loads the compiled CSS and the entry script", () => {
