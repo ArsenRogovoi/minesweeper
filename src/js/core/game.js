@@ -182,9 +182,14 @@ export function createGame({ random, config = LEVELS.beginner, marks = true }) {
       emit("new");
     },
 
-    /** Switches the Marks (?) setting; it affects the next right-click cycles. */
+    /** Switches the Marks (?) setting; turning it off also clears the "?" marks. */
     setMarks(enabled) {
       marksEnabled = enabled;
+      if (!enabled) {
+        cellStates = cellStates.map((cellState) =>
+          cellState === "question" ? "closed" : cellState,
+        );
+      }
       emit("change");
     },
 

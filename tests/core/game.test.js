@@ -211,14 +211,32 @@ describe("marks", () => {
     expect(events.map((e) => e.type)).toEqual(["change"]);
   });
 
-  it("lets an existing question mark go back to closed after Marks are turned off", () => {
+  it("clears existing question marks when Marks are turned off", () => {
     const game = gameWithMines(CORNER_MINE);
     game.toggleMark(3);
     game.toggleMark(3);
     game.setMarks(false);
-    expect(stateOf(game, 3)).toBe("question");
-    game.toggleMark(3);
     expect(stateOf(game, 3)).toBe("closed");
+  });
+
+  it("keeps flags and opened cells when Marks are turned off", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(5);
+    game.toggleMark(3);
+    game.toggleMark(7);
+    game.toggleMark(7); // "?"
+    game.setMarks(false);
+    expect(stateOf(game, 3)).toBe("flag");
+    expect(stateOf(game, 5)).toBe("open");
+    expect(stateOf(game, 7)).toBe("closed");
+  });
+
+  it("keeps question marks when Marks are turned on", () => {
+    const game = gameWithMines(CORNER_MINE, { marks: false });
+    game.setMarks(true);
+    game.toggleMark(3);
+    game.toggleMark(3);
+    expect(stateOf(game, 3)).toBe("question");
   });
 
   it("does not mark opened cells", () => {

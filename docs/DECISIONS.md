@@ -38,6 +38,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 29 | Desktop background   | Resolves Q7. Switchable, two options for now: solid XP desktop colour and a Bliss-like gradient (own artwork). Chosen in a “Background” submenu of the Game menu; saved in localStorage with the other settings (2026-10-19) |
 | 30 | Cell size            | 16 × 16 px as in XP; the whole window is scaled through one CSS variable (×1 by default, ×2 on high-DPI); no scale choice in the menu (was P6) |
 | 31 | Default background   | Solid XP colour until the player chooses another (was P7)                |
+| 32 | Marks turned off    | Existing “?” marks disappear (become closed); flags stay (2026-10-19)    |
 
 ## Proposed (need confirmation)
 
