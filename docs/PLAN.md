@@ -27,7 +27,7 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 2 — Core: game rules
 
-- [ ] Game states: ready → playing → won / lost
+- [x] Game states: ready → playing → won / lost
 - [ ] Open cell, flood fill on 0
 - [ ] Mark cycle (flag / “?” / closed), with Marks on and off; flags block opening
 - [ ] Chord: opens neighbours only when flag count matches; wrong flags lead to loss
