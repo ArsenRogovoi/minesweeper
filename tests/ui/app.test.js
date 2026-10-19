@@ -123,4 +123,21 @@ describe("startApp", () => {
       expect(smiley()).toBe("smiley smiley--dead");
     });
   });
+
+  describe("new game", () => {
+    it("starts when the smiley is clicked, even after a loss", () => {
+      app.game.open(0);
+      expect(smiley()).toBe("smiley smiley--dead");
+      document.querySelector(".smiley").click();
+      expect(smiley()).toBe("smiley smiley--normal");
+      expect(document.querySelectorAll(".cell--closed")).toHaveLength(81);
+    });
+
+    it("starts when F2 is pressed", () => {
+      app.game.open(80);
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "F2" }));
+      expect(document.querySelectorAll(".cell--closed")).toHaveLength(81);
+      expect(digits(".led--timer")).toBe("000");
+    });
+  });
 });

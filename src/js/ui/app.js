@@ -1,5 +1,6 @@
 import { attachTimer, createTimer } from "../core/timer.js";
 import { createGame } from "../core/game.js";
+import { createControls } from "./controls.js";
 import { createFieldRenderer } from "./field.js";
 import { createMouseInput } from "./mouse.js";
 import { createStatusRenderer } from "./status.js";
@@ -16,7 +17,8 @@ import { createStatusRenderer } from "./status.js";
  * @returns {{
  *   game: ReturnType<typeof createGame>,
  *   timer: ReturnType<typeof createTimer>,
- *   mouse: ReturnType<typeof createMouseInput>
+ *   mouse: ReturnType<typeof createMouseInput>,
+ *   controls: ReturnType<typeof createControls>
  * }}
  */
 export function startApp({ document, random, scheduler }) {
@@ -50,11 +52,13 @@ export function startApp({ document, random, scheduler }) {
     },
   });
 
+  const controls = createControls({ document, smiley: find(".smiley"), game });
+
   game.subscribe(({ snapshot }) => render(snapshot));
   timer.subscribe(({ seconds }) => status.renderTimer(seconds));
 
   render(game.getSnapshot());
   status.renderTimer(timer.getSeconds());
 
-  return { game, timer, mouse };
+  return { game, timer, mouse, controls };
 }
