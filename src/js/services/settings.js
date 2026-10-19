@@ -1,0 +1,77 @@
+import { LEVELS, clampCustom } from "../core/levels.js";
+import { DEFAULT_LANGUAGE, LANGUAGES } from "./languages.js";
+
+/** localStorage key under which all settings are stored as one JSON object. */
+export const SETTINGS_KEY = "minesweeper.settings";
+
+const LEVEL_NAMES = [...Object.keys(LEVELS), "custom"];
+
+/**
+ * @typedef {{
+ *   level: "beginner"|"intermediate"|"expert"|"custom",
+ *   custom: {width: number, height: number, mines: number},
+ *   marks: boolean,
+ *   language: "ru"|"en"
+ * }} Settings
+ */
+
+function isObject(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Turns anything into valid settings; each invalid or missing field gets its default. */
+function normalize(raw, defaultLanguage) {
+  const source = isObject(raw) ? raw : {};
+  const custom = isObject(source.custom) ? source.custom : {};
+  return {
+    level: LEVEL_NAMES.includes(source.level) ? source.level : "beginner",
+    custom: clampCustom(custom),
+    marks: typeof source.marks === "boolean" ? source.marks : true,
+    language: LANGUAGES.includes(source.language)
+      ? source.language
+      : defaultLanguage,
+  };
+}
+
+/**
+ * Stores the settings (level, custom field, Marks, language) in a localStorage-like
+ * storage. Missing, broken or unavailable storage never breaks the game: the
+ * defaults are used instead.
+ *
+ * @param {{
+ *   storage?: {getItem: Function, setItem: Function} | null,
+ *   defaultLanguage?: string
+ * }} options `defaultLanguage` is used when no language is saved (see detectLanguage)
+ * @returns {{load: () => Settings, save: (settings: Settings) => boolean}}
+ */
+export function createSettingsStore({ storage, defaultLanguage } = {}) {
+  const fallbackLanguage = LANGUAGES.includes(defaultLanguage)
+    ? defaultLanguage
+    : DEFAULT_LANGUAGE;
+
+  return {
+    /** Reads the settings; always returns valid ones. */
+    load() {
+      let raw = null;
+      try {
+        raw = JSON.parse(storage.getItem(SETTINGS_KEY));
+      } catch {
+        // no storage, access denied or broken JSON: use the defaults
+      }
+      return normalize(raw, fallbackLanguage);
+    },
+
+    /** Writes the settings; returns false if the storage is missing or refuses. */
+    save(settings) {
+      try {
+        storage.setItem(
+          SETTINGS_KEY,
+          JSON.stringify(normalize(settings, fallbackLanguage)),
+        );
+        return true;
+      } catch {
+        return false;
+      }
+    },
+  };
+}

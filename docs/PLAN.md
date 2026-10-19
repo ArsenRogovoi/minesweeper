@@ -44,7 +44,7 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 4 — Services
 
-- [ ] Settings storage: load/save level, custom size, Marks, language; safe defaults on missing/broken data
+- [x] Settings storage: load/save level, custom size, Marks, language; safe defaults on missing/broken data
 - [ ] i18n: `ru` / `en` dictionaries, browser-language detection, `t(key)`, change-language event
 
 ## Stage 5 — Static layout and styles
