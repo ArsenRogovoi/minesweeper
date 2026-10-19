@@ -7,13 +7,13 @@ owner first. Tick `[x]` when a task is done.
 ## Stage 0 — Environment and skeleton
 
 - [x] Node.js 24 installed inside WSL via fnm (by the owner) — see CLAUDE.md “Environment”
-- [ ] Add `.nvmrc` with `24`
-- [ ] `git init`, `.gitignore` (`node_modules/`, `css/`, `coverage/`, `.env`, `.env.*`)
-- [ ] `package.json` with scripts from CLAUDE.md; dev dependencies: sass, vitest, jsdom, @vitest/coverage-v8,
+- [x] Add `.nvmrc` with `24`
+- [x] `git init`, `.gitignore` (`node_modules/`, `css/`, `coverage/`, `.env`, `.env.*`)
+- [x] `package.json` with scripts from CLAUDE.md; dev dependencies: sass, vitest, jsdom, @vitest/coverage-v8,
       eslint, @eslint/js, globals, eslint-config-prettier, prettier, + dev server tools (P2)
-- [ ] ESLint flat config, Prettier config, Vitest config (coverage thresholds P4)
-- [ ] Folder skeleton from REQUIREMENTS §2.2, empty `main.scss` with 7-1 folders, minimal `index.html`
-- [ ] One trivial passing test to prove the pipeline
+- [x] ESLint flat config, Prettier config, Vitest config (coverage thresholds P4)
+- [x] Folder skeleton from REQUIREMENTS §2.2, empty `main.scss` with 7-1 folders, minimal `index.html`
+- [x] One trivial passing test to prove the pipeline
 
 **Done when:** `npm run dev` serves the page with live reload; all checks pass.
 

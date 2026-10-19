@@ -31,15 +31,15 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 22 | Package manager      | npm                                                                      |
 | 23 | Node.js              | Node 24 LTS inside WSL via fnm (installed by the owner); Windows Node.js is never used (supersedes P1) |
 | 24 | Sensitive data       | No secrets or personal data in any file; `.env*` git-ignored; agents warn the owner on any finding |
+| 25 | Dev tooling          | `browser-sync` (static server + live reload) and `npm-run-all2` (parallel scripts) (was P2) |
+| 26 | Test location        | Separate `tests/` folder mirroring `src/js/` (was P3)                    |
+| 27 | Coverage thresholds  | `core/` 100 % lines and branches; whole project ≥ 90 % (was P4)         |
 
 ## Proposed (need confirmation)
 
 | #  | Topic                   | Proposal                                                                              |
 | -- | ----------------------- | ------------------------------------------------------------------------------------- |
 | P1 | ~~Node.js in WSL~~      | ~~Install via nvm, Node 22 LTS~~ — superseded by decision 23                          |
-| P2 | Dev tooling packages    | `browser-sync` (static server + live reload) and `npm-run-all2` (run scripts in parallel) |
-| P3 | Test location           | Separate `tests/` folder mirroring `src/js/`                                          |
-| P4 | Coverage thresholds     | `core/` 100 % lines and branches; whole project ≥ 90 %                                |
 | P5 | Long-press duration     | 400 ms, defined as a single constant                                                  |
 | P6 | Cell size               | 16 × 16 px as in XP, whole window scaled ×2 on high-DPI / via CSS variable            |
 
