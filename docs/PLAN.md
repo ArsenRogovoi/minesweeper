@@ -77,12 +77,14 @@ owner first. Tick `[x]` when a task is done.
 
 ## Stage 8 — Menu and dialog
 
-- [ ] Resolve Q2, Q3
-- [ ] Game menu: open/close behaviour like XP, check marks, level switch, Marks toggle, language switch,
-      Background submenu (decision 29)
-- [ ] Custom dialog with validation and clamping
-- [ ] Help menu (per Q2)
-- [ ] Wire settings persistence and i18n into the UI
+- [x] Resolve Q2, Q3 (decisions 35, 36)
+- [ ] Menu bar component: open/close behaviour like XP (click opens, hover switches, outside click and Esc close),
+      check marks, separators, submenus, drawn from a model
+- [ ] Wire settings and i18n into the page: load settings at start, window title / language texts, desktop
+      background class
+- [ ] Game menu: New (F2), levels, Marks (?), Language and Background submenus; save every change
+- [ ] Dialog component (XP style, modal) and the Custom field dialog with validation and clamping
+- [ ] Help menu: About and Rules dialogs (decision 35)
 
 ## Stage 9 — Touch
 

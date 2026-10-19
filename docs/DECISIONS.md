@@ -41,6 +41,8 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 32 | Marks turned off    | Existing “?” marks disappear (become closed); flags stay (2026-10-19)    |
 | 33 | Supported browsers   | Resolves Q5. Wide support: browser versions released in the last two years (Chrome, Edge, Firefox, Safari); older ones are not checked (2026-10-19) |
 | 34 | Keyboard             | Resolves Q6. F2 = new game. Playing from the keyboard: arrow keys move a cursor over the field, Space opens a closed cell or does a chord on an opened number, F cycles flag / “?”. No ARIA roles or screen-reader work in v1 (2026-10-19) |
+| 35 | Help menu            | Resolves Q2. Two items: “About” (small XP-style window: name, version, “learning clone of Windows XP Minesweeper”) and “Rules” (short RU/EN text on the rules and the controls: mouse, keyboard, touch) (2026-10-19) |
+| 36 | Exit item            | Resolves Q3. No “Exit” item in the Game menu: a page cannot close its own tab (2026-10-19) |
 
 ## Proposed (need confirmation)
 
@@ -56,8 +58,8 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | #  | Stage | Question                                                                                 |
 | -- | ----- | ---------------------------------------------------------------------------------------- |
 | Q1 | 0     | ~~Node.js not installed in WSL~~ — resolved by decision 23                               |
-| Q2 | 8     | Help menu: what should it contain? (e.g. “About” dialog only / rules page / disabled items as decoration) |
-| Q3 | 8     | Should the XP “Exit” item exist in the Game menu, and what would it do?                  |
+| Q2 | 8     | ~~Help menu contents~~ — resolved by decision 35 |
+| Q3 | 8     | ~~Exit item~~ — resolved by decision 36 |
 | Q4 | 9     | Expert field (30 columns) is wider than a phone screen: scale the window down, or scroll horizontally? |
 | Q5 | 6     | ~~Supported browsers~~ — resolved by decision 33 |
 | Q6 | 7     | ~~Keyboard / accessibility~~ — resolved by decision 34 |
