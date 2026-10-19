@@ -1,6 +1,7 @@
 /** Russian UI texts. Keep the keys identical to en.js (a test checks it). */
 export default {
   "window.title": "Сапёр",
+  "smiley.label": "Новая игра",
   "menu.game": "Игра",
   "menu.help": "Справка",
   "game.new": "Новая игра",

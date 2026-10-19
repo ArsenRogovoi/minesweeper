@@ -25,6 +25,7 @@ describe("dictionaries", () => {
   it("contains the texts required for the menu bar, Game menu and Custom dialog", () => {
     const required = [
       "window.title",
+      "smiley.label",
       "menu.game",
       "menu.help",
       "game.new",

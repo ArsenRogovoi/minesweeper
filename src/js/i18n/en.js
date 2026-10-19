@@ -1,6 +1,7 @@
 /** English UI texts. Keep the keys identical to ru.js (a test checks it). */
 export default {
   "window.title": "Minesweeper",
+  "smiley.label": "New game",
   "menu.game": "Game",
   "menu.help": "Help",
   "game.new": "New",

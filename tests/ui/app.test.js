@@ -10,18 +10,27 @@ const MINES = [0, 4, 13, 22, 31, 40, 49, 58, 67, 76];
 let scheduler;
 let app;
 
-beforeEach(() => {
-  const html = new DOMParser().parseFromString(
-    readFileSync("index.html", "utf8"),
-    "text/html",
-  );
-  document.body.innerHTML = html.body.innerHTML;
+const PAGE = new DOMParser().parseFromString(
+  readFileSync("index.html", "utf8"),
+  "text/html",
+);
+
+/** Loads the page into the jsdom document and starts the app on it. */
+function start(options = {}) {
+  document.documentElement.lang = "en";
+  document.body.className = PAGE.body.className;
+  document.body.innerHTML = PAGE.body.innerHTML;
   scheduler = createFakeScheduler();
-  app = startApp({
+  return startApp({
     document,
     random: randomForMines(81, MINES),
     scheduler,
+    ...options,
   });
+}
+
+beforeEach(() => {
+  app = start();
 });
 
 const cell = (index) => document.querySelector(`.cell[data-index="${index}"]`);
@@ -179,6 +188,76 @@ describe("startApp", () => {
       app.game.newGame();
       expect(cell(0).classList.contains("cell--cursor")).toBe(true);
       expect(cell(1).classList.contains("cell--cursor")).toBe(false);
+    });
+  });
+
+  describe("settings and language", () => {
+    const storageWith = (settings) => ({
+      getItem: () => JSON.stringify(settings),
+      setItem: () => {},
+    });
+    const noRandomNeeded = () => 0.5;
+
+    it("starts with the saved level", () => {
+      app = start({
+        storage: storageWith({ level: "expert" }),
+        random: noRandomNeeded,
+      });
+      expect(document.querySelectorAll(".cell")).toHaveLength(480);
+      expect(digits(".led--mines")).toBe("099");
+    });
+
+    it("starts with the saved custom field", () => {
+      app = start({
+        storage: storageWith({
+          level: "custom",
+          custom: { width: 12, height: 10, mines: 20 },
+        }),
+        random: noRandomNeeded,
+      });
+      expect(document.querySelectorAll(".cell")).toHaveLength(120);
+      expect(digits(".led--mines")).toBe("020");
+    });
+
+    it("starts with the saved Marks setting", () => {
+      app = start({ storage: storageWith({ marks: false }) });
+      app.game.toggleMark(40);
+      app.game.toggleMark(40);
+      expect(cell(40).classList.contains("cell--question")).toBe(false);
+      expect(app.game.getSnapshot().marks).toBe(false);
+    });
+
+    it("shows the texts in the saved language", () => {
+      app = start({ storage: storageWith({ language: "ru" }) });
+      expect(document.title).toBe("Сапёр");
+      expect(document.documentElement.lang).toBe("ru");
+    });
+
+    it("picks the language from the browser when nothing is saved", () => {
+      app = start({ browserLanguage: "ru-RU" });
+      expect(document.title).toBe("Сапёр");
+      app = start({ browserLanguage: "de-DE" });
+      expect(document.title).toBe("Minesweeper");
+    });
+
+    it("applies the saved background", () => {
+      app = start({ storage: storageWith({ background: "gradient" }) });
+      expect(document.body.classList.contains("desktop--gradient")).toBe(true);
+      expect(document.body.classList.contains("desktop--solid")).toBe(false);
+    });
+
+    it("works without any storage", () => {
+      app = start({ storage: null });
+      expect(document.querySelectorAll(".cell")).toHaveLength(81);
+      expect(document.title).toBe("Minesweeper");
+    });
+
+    it("changes the texts when the language changes", () => {
+      app.i18n.setLanguage("ru");
+      expect(document.title).toBe("Сапёр");
+      expect(document.querySelector(".window__title").textContent).toBe(
+        "Сапёр",
+      );
     });
   });
 });

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   SETTINGS_KEY,
   createSettingsStore,
+  levelConfig,
+  safeLocalStorage,
 } from "../../src/js/services/settings.js";
 
 /** In-memory stand-in for localStorage. */
@@ -204,5 +206,50 @@ describe("settings store: save", () => {
 
   it("returns false when there is no storage", () => {
     expect(createSettingsStore({ storage: null }).save(DEFAULTS)).toBe(false);
+  });
+});
+
+describe("levelConfig", () => {
+  it("returns the preset for the three levels", () => {
+    expect(levelConfig(DEFAULTS)).toEqual({ width: 9, height: 9, mines: 10 });
+    expect(levelConfig({ ...DEFAULTS, level: "intermediate" })).toEqual({
+      width: 16,
+      height: 16,
+      mines: 40,
+    });
+    expect(levelConfig({ ...DEFAULTS, level: "expert" })).toEqual({
+      width: 30,
+      height: 16,
+      mines: 99,
+    });
+  });
+
+  it("returns the custom field for the custom level", () => {
+    const settings = {
+      ...DEFAULTS,
+      level: "custom",
+      custom: { width: 12, height: 10, mines: 20 },
+    };
+    expect(levelConfig(settings)).toEqual({ width: 12, height: 10, mines: 20 });
+  });
+});
+
+describe("safeLocalStorage", () => {
+  it("returns the localStorage of the window", () => {
+    const storage = memoryStorage();
+    expect(safeLocalStorage({ localStorage: storage })).toBe(storage);
+  });
+
+  it("returns null when reading localStorage throws (blocked site data)", () => {
+    const win = {
+      get localStorage() {
+        throw new Error("SecurityError");
+      },
+    };
+    expect(safeLocalStorage(win)).toBeNull();
+  });
+
+  it("returns null when there is no localStorage", () => {
+    expect(safeLocalStorage({})).toBeNull();
   });
 });

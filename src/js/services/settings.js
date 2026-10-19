@@ -82,3 +82,26 @@ export function createSettingsStore({ storage, defaultLanguage } = {}) {
     },
   };
 }
+
+/**
+ * Field size for the level in the settings: a preset, or the custom field.
+ * @param {Settings} settings
+ * @returns {{width: number, height: number, mines: number}}
+ */
+export function levelConfig({ level, custom }) {
+  return level === "custom" ? custom : LEVELS[level];
+}
+
+/**
+ * The window's localStorage, or null when the browser refuses access
+ * (blocked site data throws on reading `localStorage`).
+ * @param {{localStorage?: Storage}} win
+ * @returns {Storage|null}
+ */
+export function safeLocalStorage(win) {
+  try {
+    return win.localStorage ?? null;
+  } catch {
+    return null;
+  }
+}

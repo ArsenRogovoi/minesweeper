@@ -1,10 +1,15 @@
 import { attachTimer, createTimer } from "../core/timer.js";
 import { createGame } from "../core/game.js";
+import en from "../i18n/en.js";
+import ru from "../i18n/ru.js";
+import { createI18n, detectLanguage } from "../services/i18n.js";
+import { createSettingsStore, levelConfig } from "../services/settings.js";
 import { createControls } from "./controls.js";
 import { createFieldRenderer } from "./field.js";
 import { createKeyboardInput } from "./keyboard.js";
 import { createMouseInput } from "./mouse.js";
 import { createStatusRenderer } from "./status.js";
+import { applyBackground, applyTexts } from "./texts.js";
 
 /**
  * Wires the game, the timer and the renderers to the page.
@@ -13,20 +18,46 @@ import { createStatusRenderer } from "./status.js";
  * @param {{
  *   document: Document,
  *   random: () => number,
- *   scheduler: {setInterval: Function, clearInterval: Function}
- * }} options
+ *   scheduler: {setInterval: Function, clearInterval: Function},
+ *   storage?: {getItem: Function, setItem: Function} | null,
+ *   browserLanguage?: string
+ * }} options `storage` is localStorage (or null), `browserLanguage` is navigator.language
  * @returns {{
  *   game: ReturnType<typeof createGame>,
  *   timer: ReturnType<typeof createTimer>,
  *   mouse: ReturnType<typeof createMouseInput>,
  *   keyboard: ReturnType<typeof createKeyboardInput>,
- *   controls: ReturnType<typeof createControls>
+ *   controls: ReturnType<typeof createControls>,
+ *   i18n: ReturnType<typeof createI18n>
  * }}
  */
-export function startApp({ document, random, scheduler }) {
+export function startApp({
+  document,
+  random,
+  scheduler,
+  storage = null,
+  browserLanguage,
+}) {
   const find = (selector) => document.querySelector(selector);
 
-  const game = createGame({ random });
+  const store = createSettingsStore({
+    storage,
+    defaultLanguage: detectLanguage(browserLanguage),
+  });
+  const settings = store.load();
+  const i18n = createI18n({
+    dictionaries: { ru, en },
+    language: settings.language,
+  });
+  applyBackground(document, settings.background);
+  applyTexts({ document, i18n });
+  i18n.subscribe(() => applyTexts({ document, i18n }));
+
+  const game = createGame({
+    random,
+    config: levelConfig(settings),
+    marks: settings.marks,
+  });
   const timer = createTimer({ scheduler });
   attachTimer(game, timer);
 
@@ -67,5 +98,5 @@ export function startApp({ document, random, scheduler }) {
   render(game.getSnapshot());
   status.renderTimer(timer.getSeconds());
 
-  return { game, timer, mouse, keyboard, controls };
+  return { game, timer, mouse, keyboard, controls, i18n };
 }
