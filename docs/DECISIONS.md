@@ -30,6 +30,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 21 | Dev server           | npm script: `sass --watch` + static server, in parallel                  |
 | 22 | Package manager      | npm                                                                      |
 | 23 | Node.js              | Node 24 LTS inside WSL via fnm (installed by the owner); Windows Node.js is never used (supersedes P1) |
+| 24 | Sensitive data       | No secrets or personal data in any file; `.env*` git-ignored; agents warn the owner on any finding |
 
 ## Proposed (need confirmation)
 

@@ -18,6 +18,23 @@ The owner uses this project to play and to learn agentic programming.
 - Record every new decision in [docs/DECISIONS.md](docs/DECISIONS.md). Items marked **Proposed** there are not
   yet approved: confirm them with the owner before relying on them.
 
+## No sensitive data in files
+
+Applies to every file in the repo (code, tests, docs, configs, fixtures, commit messages) and to agent memory.
+
+- **Never write secrets**: passwords, API keys, tokens, private keys, `.env` contents, credentials of any kind.
+  This game needs none; if something seems to require one, stop and ask the owner.
+- **Never write personal data**: real names, usernames, email addresses, home-directory paths with a username
+  (use `~` or `$HOME`), UIDs, machine/host names, IP addresses, other OS users' details.
+- Test data and examples use obviously fake values (`Player`, `example@example.com`).
+- If personal or secret data appears in tool output or the conversation, do not copy it into files.
+- Before finishing a stage, search the changed files for such data (e.g. `grep` for `@`, `/home/`, `token`,
+  `password`, `secret`, `key`).
+- **Warn the owner immediately** if you find anything sensitive — in the repo, in files you are about to write,
+  in tool output, or in what was pasted into the conversation. Say what it is and where (file and line), without
+  repeating the secret value itself, and wait for the owner's decision before changing or deleting it.
+- `.env` and `.env.*` files are git-ignored and must never be committed.
+
 ## Workflow
 
 - Work through [docs/PLAN.md](docs/PLAN.md) in order. Several stages may be done in a row; stop as soon as an

@@ -8,7 +8,7 @@ owner first. Tick `[x]` when a task is done.
 
 - [x] Node.js 24 installed inside WSL via fnm (by the owner) — see CLAUDE.md “Environment”
 - [ ] Add `.nvmrc` with `24`
-- [ ] `git init`, `.gitignore` (`node_modules/`, `css/`, `coverage/`)
+- [ ] `git init`, `.gitignore` (`node_modules/`, `css/`, `coverage/`, `.env`, `.env.*`)
 - [ ] `package.json` with scripts from CLAUDE.md; dev dependencies: sass, vitest, jsdom, @vitest/coverage-v8,
       eslint, @eslint/js, globals, eslint-config-prettier, prettier, + dev server tools (P2)
 - [ ] ESLint flat config, Prettier config, Vitest config (coverage thresholds P4)
