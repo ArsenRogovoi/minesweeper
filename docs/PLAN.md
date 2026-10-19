@@ -78,7 +78,7 @@ owner first. Tick `[x]` when a task is done.
 ## Stage 8 — Menu and dialog
 
 - [x] Resolve Q2, Q3 (decisions 35, 36)
-- [ ] Menu bar component: open/close behaviour like XP (click opens, hover switches, outside click and Esc close),
+- [x] Menu bar component: open/close behaviour like XP (click opens, hover switches, outside click and Esc close),
       check marks, separators, submenus, drawn from a model
 - [ ] Wire settings and i18n into the page: load settings at start, window title / language texts, desktop
       background class

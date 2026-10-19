@@ -1,0 +1,86 @@
+@use "../abstracts" as *;
+
+// Drop-down menu. Hidden until its menu (or, for .menu--sub, its parent item) is open.
+.menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: none;
+  min-width: u(110);
+  padding: u(2);
+  background: $menu-bg;
+  color: #000; // not inherited from a highlighted parent item
+  border: u(1) solid $menu-border;
+  box-shadow: u(2) u(2) 0 rgb(0 0 0 / 25%);
+  white-space: nowrap;
+}
+
+.menubar__menu--open > .menu,
+.menu__item--open > .menu--sub {
+  display: block;
+}
+
+.menu--sub {
+  top: u(-3);
+  left: 100%;
+}
+
+.menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: u($menu-item-height);
+  padding: 0 u(20) 0 u(22);
+  cursor: default;
+
+  &:hover,
+  &.menu__item--open {
+    background: $menu-highlight;
+    color: #fff;
+  }
+}
+
+.menu__shortcut {
+  margin-left: auto;
+  padding-left: u(24);
+}
+
+.menu__separator {
+  height: u(1);
+  margin: u(2) u(1);
+  background: $menu-border;
+}
+
+// Check mark in the left gutter.
+.menu__item--checked::before {
+  content: "";
+  position: absolute;
+  top: u(4);
+  left: u(8);
+  width: u(4);
+  height: u(8);
+  border: solid currentcolor;
+  border-width: 0 u(2) u(2) 0;
+  transform: rotate(45deg);
+}
+
+// Arrow of an item that has a submenu.
+.menu__item--submenu::after {
+  content: "";
+  position: absolute;
+  top: u(6);
+  right: u(6);
+  border: u(4) solid transparent;
+  border-left-color: currentcolor;
+  border-right-width: 0;
+}
+
+.menu__item--disabled {
+  color: $menu-disabled;
+
+  &:hover {
+    background: none;
+    color: $menu-disabled;
+  }
+}

@@ -1,15 +1,27 @@
 @use "../abstracts" as *;
 
 .menubar {
+  position: relative;
+  z-index: 2; // the open menus are drawn over the game area
   display: flex;
   height: u($menubar-height);
   padding: u(1) u(2);
   background: $luna-face;
 }
 
+.menubar__menu {
+  position: relative;
+}
+
 .menubar__item {
+  height: 100%;
   padding: 0 u(7);
   border: 0;
   background: none;
   cursor: default;
+}
+
+.menubar__menu--open > .menubar__item {
+  background: $menu-highlight;
+  color: #fff;
 }
