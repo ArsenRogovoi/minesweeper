@@ -190,6 +190,23 @@ export function createGame({ random, config = LEVELS.beginner, marks = true }) {
       emit("change");
     },
 
+    /**
+     * Chord: on an opened number whose flag count equals the number, opens all
+     * closed neighbours that are not flagged. A wrong flag can make the player lose.
+     */
+    chord(index) {
+      if (isOver() || !isValidIndex(index) || cellStates[index] !== "open") {
+        return;
+      }
+      const neighbors = getNeighbors(board.width, board.height, index);
+      const flags = neighbors.filter((n) => cellStates[n] === "flag").length;
+      const targets = neighbors.filter(isOpenable);
+      if (flags !== board.cells[index].adjacent || targets.length === 0) {
+        return;
+      }
+      openCells(targets);
+    },
+
     /** Opens a closed cell; an empty cell (0) opens its neighbours too. */
     open(index) {
       if (isOver() || !isValidIndex(index) || !isOpenable(index)) {

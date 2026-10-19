@@ -414,3 +414,141 @@ describe("win", () => {
     expect(events).toEqual([]);
   });
 });
+
+describe("chord", () => {
+  // 5x3, the mines (2, 7, 12) form a wall in the middle column:
+  //   0 1 * . .
+  //   0 3 * . .     cell 6 touches all three mines, cell 1 touches two
+  //   0 1 * . .
+  // The right half stays closed, so a chord on the left half cannot win.
+  const WALL = { width: 5, height: 3, mineIndices: [2, 7, 12] };
+  const stateOf = (game, index) => game.getSnapshot().cells[index].state;
+  const states = (game, indices) => indices.map((i) => stateOf(game, i));
+
+  function wallGameAt6(flagged) {
+    const game = gameWithMines(WALL);
+    game.open(6);
+    flagged.forEach((i) => game.toggleMark(i));
+    return game;
+  }
+
+  it("opens the closed neighbours when the flag count matches the number", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    game.chord(6);
+    expect(states(game, [0, 1, 5, 10, 11])).toEqual(Array(5).fill("open"));
+    expect(states(game, [2, 7, 12])).toEqual(Array(3).fill("flag"));
+    expect(game.getSnapshot().state).toBe("playing");
+  });
+
+  it("floods from a neighbour that turns out to be empty", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    game.chord(6);
+    // cell 0 is empty, so its neighbours open too, but the flood stops at the wall
+    expect(game.getSnapshot().cells[0]).toEqual({ state: "open", adjacent: 0 });
+    expect(stateOf(game, 3)).toBe("closed");
+  });
+
+  it("emits a change event for a successful chord", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(events.map((e) => e.type)).toEqual(["change"]);
+  });
+
+  it("does nothing when there are fewer flags than the number", () => {
+    const game = wallGameAt6([2, 7]);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(stateOf(game, 0)).toBe("closed");
+    expect(events).toEqual([]);
+  });
+
+  it("does nothing when there are more flags than the number", () => {
+    const game = wallGameAt6([2, 7, 12, 0]);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(stateOf(game, 1)).toBe("closed");
+    expect(events).toEqual([]);
+  });
+
+  it("opens neighbours that carry a question mark", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    game.toggleMark(0);
+    game.toggleMark(0); // flag -> "?"
+    game.chord(6);
+    expect(stateOf(game, 0)).toBe("open");
+  });
+
+  it("loses when a flag is wrong and a mine gets opened", () => {
+    // mines 2 and 7 flagged, 0 flagged by mistake; mine 12 is opened
+    const game = wallGameAt6([2, 7, 0]);
+    game.chord(6);
+    expect(game.getSnapshot().state).toBe("lost");
+    expect(stateOf(game, 12)).toBe("exploded");
+    expect(stateOf(game, 0)).toBe("wrongFlag");
+    expect(states(game, [2, 7])).toEqual(["flag", "flag"]);
+  });
+
+  it("explodes every mine opened by a wrong chord", () => {
+    const game = wallGameAt6([0, 1, 5]);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(states(game, [2, 7, 12])).toEqual(Array(3).fill("exploded"));
+    expect(states(game, [0, 1, 5])).toEqual(Array(3).fill("wrongFlag"));
+    expect(events.map((e) => e.type)).toEqual(["lose"]);
+  });
+
+  it("wins when the chord opens the last safe cell", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(5);
+    game.toggleMark(0);
+    const events = recordEvents(game);
+    game.chord(5);
+    expect(game.getSnapshot().state).toBe("won");
+    expect(events.map((e) => e.type)).toEqual(["win"]);
+  });
+
+  it("does nothing on a number without closed neighbours", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    game.chord(6);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(events).toEqual([]);
+  });
+
+  it("does nothing on closed, flagged or question-marked cells", () => {
+    const game = wallGameAt6([2]);
+    game.toggleMark(1);
+    game.toggleMark(1);
+    game.toggleMark(1); // 1 is closed again, 2 is flagged
+    game.toggleMark(5);
+    game.toggleMark(5); // 5 has "?"
+    const events = recordEvents(game);
+    [1, 2, 5].forEach((i) => game.chord(i));
+    expect(events).toEqual([]);
+  });
+
+  it("does nothing on an empty (0) cell", () => {
+    const game = gameWithMines(WALL);
+    game.open(14);
+    const events = recordEvents(game);
+    game.chord(14);
+    expect(events).toEqual([]);
+  });
+
+  it("ignores indices outside the board", () => {
+    const game = wallGameAt6([2, 7, 12]);
+    const events = recordEvents(game);
+    game.chord(-1);
+    game.chord(15);
+    expect(events).toEqual([]);
+  });
+
+  it("is ignored after the game is over", () => {
+    const game = wallGameAt6([0, 1, 5]);
+    game.chord(6);
+    const events = recordEvents(game);
+    game.chord(6);
+    expect(events).toEqual([]);
+  });
+});
