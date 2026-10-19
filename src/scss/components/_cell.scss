@@ -1,11 +1,50 @@
 @use "../abstracts" as *;
 
+// Icons are drawn over the whole cell (border box); the bevel border stays on top.
 .cell {
   width: u($cell-size);
   height: u($cell-size);
-  background: $game-face;
+  background-color: $game-face;
+  background-origin: border-box;
+  font: bold u(14) / 1 $font-number;
+  text-align: center;
+  line-height: u($cell-size - 1);
 }
 
 .cell--closed {
   @include raised(2);
+}
+
+.cell--flag {
+  @include icon("flag.svg", $cell-size);
+}
+
+.cell--question {
+  @include icon("question.svg", $cell-size);
+}
+
+// Opened cell: flat, with a thin dark line on the top and left side.
+.cell--open {
+  border: 0;
+  border-top: u(1) solid $bevel-dark;
+  border-left: u(1) solid $bevel-dark;
+  line-height: u($cell-size - 2);
+}
+
+.cell--mine {
+  @include icon("mine.svg", $cell-size);
+}
+
+.cell--exploded {
+  background-color: $mine-exploded-bg;
+}
+
+.cell--wrong-flag {
+  @include icon("mine-crossed.svg", $cell-size);
+}
+
+@each $count, $color in $number-colors {
+  .cell--n#{$count} {
+    color: $color;
+  }
 }

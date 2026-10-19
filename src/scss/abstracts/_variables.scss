@@ -16,9 +16,21 @@ $bevel-light: #fff;
 $bevel-dark: #808080;
 $bevel-darkest: #404040;
 
-// LED counters
-$led-off-bg: #000;
-$led-on: #f00;
+// LED counters: only the lit segments are drawn (SVG), on a black background
+$led-bg: #000;
+
+// Colours of the numbers 1-8 on opened cells
+$number-colors: (
+  1: #0000ff,
+  2: #008000,
+  3: #ff0000,
+  4: #000080,
+  5: #800000,
+  6: #008080,
+  7: #000,
+  8: #808080,
+);
+$mine-exploded-bg: #f00;
 
 // Desktop backgrounds
 $desktop-solid: #3a6ea5;
@@ -31,8 +43,7 @@ $hill-far: #6faa2e;
 // Fonts
 $font-ui: Tahoma, "Segoe UI", Verdana, sans-serif;
 $font-title: "Trebuchet MS", Tahoma, sans-serif;
-$font-led:
-  "Courier New", monospace; // placeholder until the SVG digits in Stage 6
+$font-number: Arial, "Helvetica Neue", sans-serif; // digits 1-8 on opened cells
 
 // Sizes (in --u units, 1 unit = 1 px at scale x1)
 $cell-size: 16;

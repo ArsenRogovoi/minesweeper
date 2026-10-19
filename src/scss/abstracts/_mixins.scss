@@ -14,3 +14,12 @@
 @mixin sunken($width: 2) {
   @include bevel($width, $bevel-dark, $bevel-light);
 }
+
+// Draws an SVG from assets/ centred in the box, scaled with the --u unit.
+// The compiled CSS lives in css/, so the path goes one level up.
+@mixin icon($file, $width, $height: $width) {
+  background-image: url("../assets/#{$file}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: u($width) u($height);
+}

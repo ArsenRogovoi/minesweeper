@@ -30,13 +30,11 @@
   );
 }
 
-// Placeholder until the SVG window icon (Stage 6).
 .window__icon {
   flex: none;
   width: u(16);
   height: u(16);
-  border-radius: 50%;
-  background: #222;
+  @include icon("icon.svg", 16);
 }
 
 .window__title {
@@ -53,45 +51,31 @@
 }
 
 .window__button {
-  position: relative;
   flex: none;
   width: u($title-button-size);
   height: u($title-button-size);
   border: u(1) solid #fff;
   border-radius: u(3);
-  background: linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
+  background-color: #2a63df;
+  background-image: linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
+}
 
-  // glyph, drawn with borders until the SVG icons exist (Stage 6)
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: auto;
+// The glyph (SVG) is drawn over the gradient.
+@each $name in (minimize, maximize, close) {
+  .window__button--#{$name} {
+    background:
+      url("../assets/window-#{$name}.svg")
+        center /
+        u($title-button-size)
+        u($title-button-size)
+        no-repeat,
+      linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
   }
-}
-
-.window__button--minimize::before {
-  inset: auto auto u(4) u(4);
-  width: u(8);
-  height: u(3);
-  background: #fff;
-}
-
-.window__button--maximize::before {
-  width: u(9);
-  height: u(9);
-  border: u(1) solid #fff;
-  border-top-width: u(3);
 }
 
 .window__button--close {
-  background: linear-gradient(135deg, #e9937c, #d1492b 60%, #b83116);
-
-  &::before {
-    width: u(11);
-    height: u(11);
-    background:
-      linear-gradient(45deg, transparent 43%, #fff 43% 57%, transparent 57%),
-      linear-gradient(-45deg, transparent 43%, #fff 43% 57%, transparent 57%);
-  }
+  background:
+    url("../assets/window-close.svg") center / u($title-button-size)
+      u($title-button-size) no-repeat,
+    linear-gradient(135deg, #e9937c, #d1492b 60%, #b83116);
 }

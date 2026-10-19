@@ -14,3 +14,9 @@
     box-shadow: none;
   }
 }
+
+@each $face in (normal, surprised, dead, won) {
+  .smiley--#{$face} {
+    @include icon("smiley-#{$face}.svg", 24);
+  }
+}

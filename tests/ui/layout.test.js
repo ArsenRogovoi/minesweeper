@@ -52,7 +52,7 @@ describe("index.html layout", () => {
     const status = $(".status");
     expect([...status.children].map((el) => el.className)).toEqual([
       "led led--mines",
-      "smiley",
+      "smiley smiley--normal",
       "led led--timer",
     ]);
     expect($(".smiley").tagName).toBe("BUTTON");

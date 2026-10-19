@@ -5,16 +5,19 @@
   width: u($led-width);
   height: u($led-height);
   padding: u(1);
-  background: $led-off-bg;
+  background: $led-bg;
   @include sunken(1);
 }
 
-// Placeholder: red text until the SVG LED digits arrive in Stage 6.
 .led__digit {
-  display: grid;
-  place-items: center;
   width: u($led-digit-width);
   height: u($led-digit-height);
-  font: bold u(20) / 1 $font-led;
-  color: $led-on;
+  background-repeat: no-repeat;
+  background-size: u($led-digit-width) u($led-digit-height);
+}
+
+@each $digit in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, minus) {
+  .led__digit--#{$digit} {
+    background-image: url("../assets/led-#{$digit}.svg");
+  }
 }
