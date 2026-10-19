@@ -1,14 +1,17 @@
 @use "../abstracts" as *;
 
-// The unit behind every size: 1 px at scale x1, 2 px at scale x2.
+// The unit behind every size: 1 px at scale x1, 2 px at scale x2, times --fit.
+// --fit is set by JS (src/js/ui/fit.js): below 1 when the window is wider than the screen.
 :root {
-  --u: 1px;
+  --base-u: 1px;
+  --fit: 1;
+  --u: calc(var(--base-u) * var(--fit));
 }
 
 // High-density screens that are wide enough for the Expert field get the x2 window.
 @media (min-resolution: 2dppx) and (min-width: 1100px) {
   :root {
-    --u: 2px;
+    --base-u: 2px;
   }
 }
 

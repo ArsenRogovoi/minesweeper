@@ -7,6 +7,7 @@ import { createSettingsStore, levelConfig } from "../services/settings.js";
 import { createControls } from "./controls.js";
 import { openCustomDialog } from "./custom-dialog.js";
 import { createFieldRenderer } from "./field.js";
+import { createFit } from "./fit.js";
 import { openAboutDialog, openRulesDialog } from "./help-dialogs.js";
 import { createKeyboardInput } from "./keyboard.js";
 import { createMenuBar } from "./menu.js";
@@ -144,7 +145,13 @@ export function startApp({
   menuBar.render();
   i18n.subscribe(() => menuBar.render());
 
-  game.subscribe(({ snapshot }) => render(snapshot));
+  const fit = createFit({ document, window: document.defaultView });
+  fit.update();
+
+  game.subscribe(({ type, snapshot }) => {
+    render(snapshot);
+    if (type === "new") fit.update(); // the field size may have changed
+  });
   timer.subscribe(({ seconds }) => status.renderTimer(seconds));
 
   render(game.getSnapshot());

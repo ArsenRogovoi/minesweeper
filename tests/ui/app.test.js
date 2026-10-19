@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { startApp } from "../../src/js/ui/app.js";
 import { createFakeScheduler, randomForMines } from "../core/helpers.js";
 
@@ -524,6 +524,60 @@ describe("startApp", () => {
       openHelp("about");
       document.querySelector(".dialog__button").click();
       expect(app.game.getSnapshot().state).toBe("playing");
+    });
+  });
+
+  describe("narrow screens", () => {
+    const fitValue = () =>
+      document.documentElement.style.getPropertyValue("--fit");
+    let measured;
+
+    // the window is 500 px wide at scale 1 for Beginner and 800 px for Expert
+    function stubWindowWidth(screenWidth) {
+      Object.defineProperty(document.documentElement, "clientWidth", {
+        configurable: true,
+        get: () => screenWidth,
+      });
+      measured = vi
+        .spyOn(Element.prototype, "getBoundingClientRect")
+        .mockImplementation(function () {
+          if (!this.classList.contains("window")) return { width: 0 };
+          const columns = Number(
+            document
+              .querySelector(".field")
+              .style.getPropertyValue("--columns"),
+          );
+          const natural = columns === 30 ? 800 : 500;
+          return { width: natural * (Number(fitValue()) || 1) };
+        });
+    }
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      document.documentElement.style.removeProperty("--fit");
+    });
+
+    it("scales the window down at start", () => {
+      stubWindowWidth(250);
+      app = start();
+      expect(fitValue()).toBe("0.5");
+    });
+
+    it("rescales when a bigger level is chosen", () => {
+      stubWindowWidth(500);
+      app = start();
+      expect(fitValue()).toBe("1");
+      document.querySelector('[data-menu="game"] > .menubar__item').click();
+      document.querySelector('.menu__item[data-item="expert"]').click();
+      expect(fitValue()).toBe("0.625");
+    });
+
+    it("does not measure the window on every move", () => {
+      stubWindowWidth(250);
+      app = start();
+      measured.mockClear();
+      app.game.open(80);
+      expect(measured).not.toHaveBeenCalled();
     });
   });
 });

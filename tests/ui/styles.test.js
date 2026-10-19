@@ -54,9 +54,16 @@ describe("SCSS", () => {
   });
 
   it("scales the whole window through one variable, 1px by default (decision 30)", () => {
-    expect(css).toMatch(/:root\s*{[^}]*--u:\s*1px/);
+    expect(css).toMatch(/:root\s*{[^}]*--base-u:\s*1px/);
     expect(css).toMatch(
-      /@media[^{]*min-resolution:\s*2dppx[^{]*{\s*:root\s*{[^}]*--u:\s*2px/,
+      /@media[^{]*min-resolution:\s*2dppx[^{]*{\s*:root\s*{[^}]*--base-u:\s*2px/,
+    );
+  });
+
+  it("multiplies the unit by the --fit scale for narrow screens (decision 37)", () => {
+    expect(css).toMatch(/:root\s*{[^}]*--fit:\s*1\s*;/);
+    expect(css).toMatch(
+      /:root\s*{[^}]*--u:\s*calc\(var\(--base-u\) \* var\(--fit\)\)/,
     );
   });
 
@@ -69,7 +76,7 @@ describe("SCSS", () => {
     const declarations = css
       .split("\n")
       .filter((line) => /^\s+[a-z-]+:/.test(line))
-      .filter((line) => !/^\s+--u:/.test(line));
+      .filter((line) => !/^\s+--[a-z-]+:/.test(line));
     const fixed = declarations.filter((line) => /\d+px/.test(line));
     expect(fixed).toEqual([]);
   });
