@@ -23,12 +23,21 @@
   @include icon("question.svg", $cell-size);
 }
 
-// Opened cell: flat, with a thin dark line on the top and left side.
-.cell--open {
+// Flat look: opened cells, and closed cells while the mouse button is held on them.
+// A thin dark line on the top and left side replaces the raised bevel.
+@mixin flat {
   border: 0;
   border-top: u(1) solid $bevel-dark;
   border-left: u(1) solid $bevel-dark;
   line-height: u($cell-size - 2);
+}
+
+.cell--open {
+  @include flat;
+}
+
+.cell--pressed {
+  @include flat;
 }
 
 .cell--mine {

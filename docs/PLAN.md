@@ -67,7 +67,7 @@ owner first. Tick `[x]` when a task is done.
 ## Stage 7 — Mouse input
 
 - [x] Resolve Q6 (decision 34)
-- [ ] Left press/move/release with pressed-cell feedback; open on release
+- [x] Left press/move/release with pressed-cell feedback; open on release
 - [ ] Right click mark cycle; context menu disabled on the field
 - [ ] Chord via both buttons or middle button, with neighbour feedback
 - [ ] Smiley reactions; smiley click and F2 start a new game

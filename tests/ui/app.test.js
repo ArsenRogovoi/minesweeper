@@ -91,4 +91,36 @@ describe("startApp", () => {
     expect(digits(".led--timer")).toBe("000");
     expect(smiley()).toBe("smiley smiley--normal");
   });
+
+  describe("mouse", () => {
+    const fire = (type, element, init) =>
+      element.dispatchEvent(
+        new PointerEvent(type, {
+          bubbles: true,
+          pointerType: "mouse",
+          button: 0,
+          ...init,
+        }),
+      );
+
+    it("shows a pressed cell and the surprised smiley while the button is held", () => {
+      fire("pointerdown", cell(80), { buttons: 1 });
+      expect(cell(80).classList.contains("cell--pressed")).toBe(true);
+      expect(smiley()).toBe("smiley smiley--surprised");
+    });
+
+    it("opens the cell on release and goes back to the normal smiley", () => {
+      fire("pointerdown", cell(80), { buttons: 1 });
+      fire("pointerup", cell(80), { buttons: 0 });
+      expect(cell(80).classList.contains("cell--open")).toBe(true);
+      expect(cell(80).classList.contains("cell--pressed")).toBe(false);
+      expect(smiley()).toBe("smiley smiley--normal");
+    });
+
+    it("shows the dead smiley after a mine is opened with the mouse", () => {
+      fire("pointerdown", cell(0), { buttons: 1 });
+      fire("pointerup", cell(0), { buttons: 0 });
+      expect(smiley()).toBe("smiley smiley--dead");
+    });
+  });
 });

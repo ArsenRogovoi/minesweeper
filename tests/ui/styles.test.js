@@ -30,6 +30,7 @@ describe("SCSS", () => {
     ".field",
     ".cell",
     ".cell--closed",
+    ".cell--pressed",
   ])("styles %s", (selector) => {
     expect(css).toContain(selector);
   });

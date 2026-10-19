@@ -1,6 +1,7 @@
 import { attachTimer, createTimer } from "../core/timer.js";
 import { createGame } from "../core/game.js";
 import { createFieldRenderer } from "./field.js";
+import { createMouseInput } from "./mouse.js";
 import { createStatusRenderer } from "./status.js";
 
 /**
@@ -12,7 +13,11 @@ import { createStatusRenderer } from "./status.js";
  *   random: () => number,
  *   scheduler: {setInterval: Function, clearInterval: Function}
  * }} options
- * @returns {{game: ReturnType<typeof createGame>, timer: ReturnType<typeof createTimer>}}
+ * @returns {{
+ *   game: ReturnType<typeof createGame>,
+ *   timer: ReturnType<typeof createTimer>,
+ *   mouse: ReturnType<typeof createMouseInput>
+ * }}
  */
 export function startApp({ document, random, scheduler }) {
   const find = (selector) => document.querySelector(selector);
@@ -21,7 +26,8 @@ export function startApp({ document, random, scheduler }) {
   const timer = createTimer({ scheduler });
   attachTimer(game, timer);
 
-  const field = createFieldRenderer(find(".field"));
+  const fieldElement = find(".field");
+  const field = createFieldRenderer(fieldElement);
   const status = createStatusRenderer({
     minesLed: find(".led--mines"),
     timerLed: find(".led--timer"),
@@ -31,8 +37,18 @@ export function startApp({ document, random, scheduler }) {
   function render(snapshot) {
     field.render(snapshot);
     status.renderMines(snapshot.minesLeft);
-    status.renderSmiley(snapshot.state);
+    status.renderSmiley(snapshot.state, mouse.isPressing());
   }
+
+  const mouse = createMouseInput({
+    document,
+    field: fieldElement,
+    game,
+    onFeedback({ pressedCells, pressing }) {
+      field.setPressed(pressedCells);
+      status.renderSmiley(game.getSnapshot().state, pressing);
+    },
+  });
 
   game.subscribe(({ snapshot }) => render(snapshot));
   timer.subscribe(({ seconds }) => status.renderTimer(seconds));
@@ -40,5 +56,5 @@ export function startApp({ document, random, scheduler }) {
   render(game.getSnapshot());
   status.renderTimer(timer.getSeconds());
 
-  return { game, timer };
+  return { game, timer, mouse };
 }

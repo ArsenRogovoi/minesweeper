@@ -174,3 +174,35 @@ describe("field renderer: cell states", () => {
     expect(cells()[5].textContent).toBe("");
   });
 });
+
+describe("field renderer: pressed cells", () => {
+  it("marks the given cells as pressed and clears the others", () => {
+    renderer.render(gameWithMines(CORNER_MINE).getSnapshot());
+    renderer.setPressed([3, 4]);
+    expect(classesOf(3)).toEqual(["cell", "cell--closed", "cell--pressed"]);
+    expect(classesOf(4)).toEqual(["cell", "cell--closed", "cell--pressed"]);
+    renderer.setPressed([4]);
+    expect(classesOf(3)).toEqual(["cell", "cell--closed"]);
+    expect(classesOf(4)).toEqual(["cell", "cell--closed", "cell--pressed"]);
+    renderer.setPressed([]);
+    expect(classesOf(4)).toEqual(["cell", "cell--closed"]);
+  });
+
+  it("keeps cells pressed when the field is rendered again", () => {
+    const game = gameWithMines(CORNER_MINE);
+    renderer.render(game.getSnapshot());
+    renderer.setPressed([3]);
+    game.toggleMark(7);
+    renderer.render(game.getSnapshot());
+    expect(classesOf(3)).toEqual(["cell", "cell--closed", "cell--pressed"]);
+  });
+
+  it("forgets pressed cells when the field is rebuilt", () => {
+    const game = gameWithMines(CORNER_MINE);
+    renderer.render(game.getSnapshot());
+    renderer.setPressed([3]);
+    game.newGame({ width: 9, height: 9, mines: 10 });
+    renderer.render(game.getSnapshot());
+    expect(container.querySelectorAll(".cell--pressed")).toHaveLength(0);
+  });
+});
