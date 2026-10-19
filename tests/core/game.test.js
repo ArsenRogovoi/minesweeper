@@ -169,3 +169,119 @@ describe("opening cells", () => {
     expect(events.map((e) => e.type)).toEqual(["change"]);
   });
 });
+
+describe("marks", () => {
+  const stateOf = (game, index) => game.getSnapshot().cells[index].state;
+
+  it("cycles closed -> flag -> question -> closed when Marks are on", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const seen = [stateOf(game, 3)];
+    for (let i = 0; i < 3; i++) {
+      game.toggleMark(3);
+      seen.push(stateOf(game, 3));
+    }
+    expect(seen).toEqual(["closed", "flag", "question", "closed"]);
+  });
+
+  it("cycles closed -> flag -> closed when Marks are off", () => {
+    const game = gameWithMines(CORNER_MINE, { marks: false });
+    const seen = [];
+    for (let i = 0; i < 3; i++) {
+      game.toggleMark(3);
+      seen.push(stateOf(game, 3));
+    }
+    expect(seen).toEqual(["flag", "closed", "flag"]);
+  });
+
+  it("has Marks on by default and reports the setting in the snapshot", () => {
+    const game = gameWithMines(CORNER_MINE);
+    expect(game.getSnapshot().marks).toBe(true);
+    game.setMarks(false);
+    expect(game.getSnapshot().marks).toBe(false);
+  });
+
+  it("emits a change event when the Marks setting changes", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const events = recordEvents(game);
+    game.setMarks(false);
+    expect(events.map((e) => e.type)).toEqual(["change"]);
+  });
+
+  it("lets an existing question mark go back to closed after Marks are turned off", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(3);
+    game.toggleMark(3);
+    game.setMarks(false);
+    expect(stateOf(game, 3)).toBe("question");
+    game.toggleMark(3);
+    expect(stateOf(game, 3)).toBe("closed");
+  });
+
+  it("does not mark opened cells", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.open(5);
+    const events = recordEvents(game);
+    game.toggleMark(5);
+    expect(stateOf(game, 5)).toBe("open");
+    expect(events).toEqual([]);
+  });
+
+  it("ignores indices outside the board", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const events = recordEvents(game);
+    game.toggleMark(-1);
+    game.toggleMark(16);
+    expect(events).toEqual([]);
+  });
+
+  it("allows marking before the first open without starting the game", () => {
+    const game = gameWithMines(CORNER_MINE);
+    const events = recordEvents(game);
+    game.toggleMark(3);
+    expect(game.getSnapshot().state).toBe("ready");
+    expect(events.map((e) => e.type)).toEqual(["change"]);
+  });
+
+  it("does not open a flagged cell", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(5);
+    const events = recordEvents(game);
+    game.open(5);
+    expect(stateOf(game, 5)).toBe("flag");
+    expect(game.getSnapshot().state).toBe("ready");
+    expect(events).toEqual([]);
+  });
+
+  it("opens a cell with a question mark", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(5);
+    game.toggleMark(5);
+    game.open(5);
+    expect(game.getSnapshot().cells[5]).toEqual({ state: "open", adjacent: 1 });
+  });
+
+  it("keeps flags closed during a flood fill", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(10);
+    game.open(15);
+    expect(stateOf(game, 10)).toBe("flag");
+    expect(stateOf(game, 11)).toBe("open");
+  });
+
+  it("opens question-marked cells during a flood fill", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.toggleMark(10);
+    game.toggleMark(10);
+    game.open(15);
+    expect(stateOf(game, 10)).toBe("open");
+  });
+
+  it("starts with all marks cleared in a new game, keeping the Marks setting", () => {
+    const game = gameWithMines(CORNER_MINE);
+    game.setMarks(false);
+    game.toggleMark(3);
+    game.newGame();
+    expect(stateOf(game, 3)).toBe("closed");
+    expect(game.getSnapshot().marks).toBe(false);
+  });
+});

@@ -29,7 +29,7 @@ owner first. Tick `[x]` when a task is done.
 
 - [x] Game states: ready → playing → won / lost
 - [x] Open cell, flood fill on 0
-- [ ] Mark cycle (flag / “?” / closed), with Marks on and off; flags block opening
+- [x] Mark cycle (flag / “?” / closed), with Marks on and off; flags block opening
 - [ ] Chord: opens neighbours only when flag count matches; wrong flags lead to loss
 - [ ] Win detection with auto-flagging; loss with exploded mine, revealed mines, wrong flags
 - [ ] Mine counter (can be negative)

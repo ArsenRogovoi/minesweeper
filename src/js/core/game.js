@@ -4,9 +4,10 @@ import { LEVELS } from "./levels.js";
 
 /**
  * @typedef {"ready"|"playing"|"won"|"lost"} GameState
- * @typedef {{state: string, adjacent: number}} CellView
+ * @typedef {{state: "closed"|"flag"|"question"|"open", adjacent: number}} CellView
  * @typedef {{
- *   state: GameState, width: number, height: number, mines: number, cells: CellView[]
+ *   state: GameState, width: number, height: number, mines: number, marks: boolean,
+ *   cells: CellView[]
  * }} Snapshot
  * @typedef {{type: "new"|"start"|"change", snapshot: Snapshot}} GameEvent
  */
@@ -22,15 +23,17 @@ import { LEVELS } from "./levels.js";
  *
  * @param {{
  *   random: () => number,
- *   config?: {width: number, height: number, mines: number}
+ *   config?: {width: number, height: number, mines: number},
+ *   marks?: boolean
  * }} options `random` returns a number in [0, 1), like Math.random.
  */
-export function createGame({ random, config = LEVELS.beginner }) {
+export function createGame({ random, config = LEVELS.beginner, marks = true }) {
   const emitter = createEmitter();
   let board;
-  let cellStates; // "closed" | "open" for now; flags and marks come next
+  let cellStates; // "closed" | "flag" | "question" | "open"
   let state;
   let currentConfig = config;
+  let marksEnabled = marks;
 
   function reset(newConfig) {
     currentConfig = newConfig;
@@ -45,6 +48,7 @@ export function createGame({ random, config = LEVELS.beginner }) {
       width: board.width,
       height: board.height,
       mines: currentConfig.mines,
+      marks: marksEnabled,
       cells: board.cells.map((cell, index) => ({
         state: cellStates[index],
         adjacent: cellStates[index] === "open" ? cell.adjacent : 0,
@@ -60,12 +64,24 @@ export function createGame({ random, config = LEVELS.beginner }) {
     return Number.isInteger(index) && index >= 0 && index < cellStates.length;
   }
 
+  /** Flags block opening; closed cells and cells with "?" can be opened. */
+  function isOpenable(index) {
+    return cellStates[index] === "closed" || cellStates[index] === "question";
+  }
+
+  /** Next state of a closed cell in the right-click cycle. */
+  const NEXT_MARK = {
+    closed: () => "flag",
+    flag: () => (marksEnabled ? "question" : "closed"),
+    question: () => "closed",
+  };
+
   /** Opens `start` and, through cells with no adjacent mines, everything reachable. */
   function revealFrom(start) {
     const pending = [start];
     while (pending.length > 0) {
       const index = pending.pop();
-      if (cellStates[index] !== "closed") {
+      if (!isOpenable(index)) {
         continue;
       }
       cellStates[index] = "open";
@@ -87,9 +103,24 @@ export function createGame({ random, config = LEVELS.beginner }) {
       emit("new");
     },
 
+    /** Switches the Marks (?) setting; it affects the next right-click cycles. */
+    setMarks(enabled) {
+      marksEnabled = enabled;
+      emit("change");
+    },
+
+    /** Right click: closed -> flag -> "?" -> closed ("?" is skipped when Marks are off). */
+    toggleMark(index) {
+      if (!isValidIndex(index) || cellStates[index] === "open") {
+        return;
+      }
+      cellStates[index] = NEXT_MARK[cellStates[index]]();
+      emit("change");
+    },
+
     /** Opens a closed cell; an empty cell (0) opens its neighbours too. */
     open(index) {
-      if (!isValidIndex(index) || cellStates[index] !== "closed") {
+      if (!isValidIndex(index) || !isOpenable(index)) {
         return;
       }
       revealFrom(index);
