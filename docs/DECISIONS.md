@@ -34,6 +34,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 25 | Dev tooling          | `browser-sync` (static server + live reload) and `npm-run-all2` (parallel scripts) (was P2) |
 | 26 | Test location        | Separate `tests/` folder mirroring `src/js/` (was P3)                    |
 | 27 | Coverage thresholds  | `core/` 100 % lines and branches; whole project ≥ 90 % (was P4)         |
+| 28 | Commits              | Agent commits on its own: one commit per stage and one per plan task (2026-10-19) |
 
 ## Proposed (need confirmation)
 
