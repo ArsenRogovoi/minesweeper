@@ -63,6 +63,13 @@ describe("index.html layout", () => {
     expect($$(".led--timer .led__digit")).toHaveLength(3);
   });
 
+  it("marks up every LED digit with its own digit class and no stray text", () => {
+    for (const digit of $$(".led__digit")) {
+      expect(digit.className).toMatch(/led__digit--(\d|minus)\b/);
+      expect(digit.textContent).toBe("");
+    }
+  });
+
   it("has an empty field container: the cells are rendered from the game state", () => {
     const field = $(".field");
     expect(field).not.toBeNull();

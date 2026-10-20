@@ -79,6 +79,34 @@ describe("SCSS", () => {
     expect(css).toMatch(/\.cell\s*{[^}]*height:\s*calc\(16 \* var\(--u\)\)/);
   });
 
+  it("makes the LED box big enough for three whole digits (no squeezed digits)", () => {
+    const units = (block, property) => {
+      const match = block.match(
+        new RegExp(
+          `(?:^|[\\s;{])${property}:\\s*calc\\((\\d+) \\* var\\(--u\\)\\)`,
+        ),
+      );
+      return match ? Number(match[1]) : 0;
+    };
+    const block = (selector) =>
+      css.match(new RegExp(`${selector}\\s*{([^}]*)}`))[1];
+    const led = block("\\.led");
+    const digit = block("\\.led__digit");
+    const border = units(led, "border");
+    const padding = units(led, "padding");
+    const inner = (size) => size - 2 * (border + padding);
+    expect(inner(units(led, "width"))).toBeGreaterThanOrEqual(
+      3 * units(digit, "width"),
+    );
+    expect(inner(units(led, "height"))).toBeGreaterThanOrEqual(
+      units(digit, "height"),
+    );
+  });
+
+  it("never shrinks a LED digit inside the flex row", () => {
+    expect(css).toMatch(/\.led__digit\s*{[^}]*flex-shrink:\s*0/);
+  });
+
   it("uses no fixed pixel lengths outside the --u variable and media queries", () => {
     const declarations = css
       .split("\n")

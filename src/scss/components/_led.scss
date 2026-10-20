@@ -4,7 +4,6 @@
   display: flex;
   width: u($led-width);
   height: u($led-height);
-  padding: u(1);
   background: $led-bg;
   @include sunken(1);
 }
@@ -12,6 +11,7 @@
 .led__digit {
   width: u($led-digit-width);
   height: u($led-digit-height);
+  flex-shrink: 0;
   background-repeat: no-repeat;
   background-size: u($led-digit-width) u($led-digit-height);
 }
