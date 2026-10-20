@@ -21,6 +21,7 @@
   cursor: default;
 }
 
+.menubar__item:hover,
 .menubar__menu--open > .menubar__item {
   background: $menu-highlight;
   color: #fff;

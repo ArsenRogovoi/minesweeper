@@ -107,6 +107,32 @@ describe("SCSS", () => {
     expect(css).toMatch(/\.led__digit\s*{[^}]*flex-shrink:\s*0/);
   });
 
+  describe("hover and pressed states (decision 39)", () => {
+    const rule = (selector) =>
+      css.match(new RegExp(`${selector}\\s*{([^}]*)}`))?.[1] ?? "";
+
+    it.each(["minimize", "maximize", "close"])(
+      "gives the %s window button a lighter hover and a darker pressed look",
+      (name) => {
+        const base = rule(`\\.window__button--${name}`);
+        const hover = rule(`\\.window__button--${name}:hover`);
+        const pressed = rule(`\\.window__button--${name}:active`);
+        for (const state of [hover, pressed]) {
+          expect(state).toContain(`window-${name}.svg`);
+          expect(state).toContain("linear-gradient");
+        }
+        expect(new Set([base, hover, pressed]).size).toBe(3);
+      },
+    );
+
+    it("highlights a menu bar item on hover like an open one", () => {
+      expect(css).toMatch(
+        /\.menubar__item:hover[^{]*{[^}]*background:\s*#316ac5/i,
+      );
+      expect(css).toMatch(/\.menubar__item:hover[^{]*{[^}]*color:\s*#fff/);
+    });
+  });
+
   it("uses no fixed pixel lengths outside the --u variable and media queries", () => {
     const declarations = css
       .split("\n")

@@ -62,22 +62,35 @@
   background-image: linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
 }
 
-// The glyph (SVG) is drawn over the gradient.
-@each $name in (minimize, maximize, close) {
+// The glyph (SVG) is drawn over the gradient. Luna has three looks: normal, hot (hover), pressed.
+@mixin title-button($name, $normal, $hot, $pressed) {
   .window__button--#{$name} {
-    background:
-      url("../assets/window-#{$name}.svg")
-        center /
-        u($title-button-size)
-        u($title-button-size)
-        no-repeat,
-      linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
+    @include title-button-look($name, $normal);
+
+    &:hover {
+      @include title-button-look($name, $hot);
+    }
+
+    &:active {
+      @include title-button-look($name, $pressed);
+    }
   }
 }
 
-.window__button--close {
+@mixin title-button-look($name, $gradient) {
   background:
-    url("../assets/window-close.svg") center / u($title-button-size)
+    url("../assets/window-#{$name}.svg") center / u($title-button-size)
       u($title-button-size) no-repeat,
-    linear-gradient(135deg, #e9937c, #d1492b 60%, #b83116);
+    $gradient;
 }
+
+$blue-normal: linear-gradient(135deg, #5f93f5, #2a63df 60%, #1f4fc9);
+$blue-hot: linear-gradient(135deg, #8bb2fa, #4a80ee 60%, #3a68dc);
+$blue-pressed: linear-gradient(135deg, #1a47b8, #2250c8 60%, #2d5fdc);
+$red-normal: linear-gradient(135deg, #e9937c, #d1492b 60%, #b83116);
+$red-hot: linear-gradient(135deg, #f4b09c, #e2664a 60%, #cc4a30);
+$red-pressed: linear-gradient(135deg, #a52a12, #b83a20 60%, #c9482c);
+
+@include title-button(minimize, $blue-normal, $blue-hot, $blue-pressed);
+@include title-button(maximize, $blue-normal, $blue-hot, $blue-pressed);
+@include title-button(close, $red-normal, $red-hot, $red-pressed);
