@@ -50,6 +50,8 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 41 | Hosting             | Supersedes 16. The repository is on GitHub (`origin`); the owner makes it public and the game is published on GitHub Pages. The owner pushes; agents commit locally and never push unless asked (a push to `master` deploys the site) (2026-10-20) |
 | 42 | Deploy              | GitHub Actions workflow `.github/workflows/pages.yml`, on every push to `master` and by hand: `npm ci`, lint, format check, tests, `build:css`; only if all pass, `index.html`, `css/`, `src/js/` and `assets/` are deployed to Pages. Compiled CSS stays out of git (2026-10-20) |
 | 43 | Unofficial notice   | Resolves Q8. “Unofficial project, not affiliated with Microsoft. Windows is a trademark of Microsoft Corporation.” in the About dialog (RU/EN, key `about.notice`) and in `README.md` (2026-10-20) |
+| 44 | Site link in README | `README.md` links to the GitHub Pages site. The link contains the owner's GitHub username: an approved exception to decision 24, allowed only there (2026-10-20) |
+| 45 | License             | Resolves Q9. MIT, in `LICENSE`. Its copyright line has the owner's real name: an approved exception to decision 24, allowed only there (2026-10-20) |
 
 ## Proposed (need confirmation)
 
@@ -72,4 +74,4 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | Q6 | 7     | ~~Keyboard / accessibility~~ — resolved by decision 34 |
 | Q7 | 5     | ~~Desktop background~~ — resolved by decision 29                                         |
 | Q8 | 11    | ~~Notice about Microsoft: where~~ — resolved by decision 43                              |
-| Q9 | 11    | License for the public repository (none, MIT, other)?                                    |
+| Q9 | 11    | ~~License~~ — resolved by decision 45                                                    |

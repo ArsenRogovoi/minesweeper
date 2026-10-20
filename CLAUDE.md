@@ -26,6 +26,8 @@ Applies to every file in the repo (code, tests, docs, configs, fixtures, commit 
   This game needs none; if something seems to require one, stop and ask the owner.
 - **Never write personal data**: real names, usernames, email addresses, home-directory paths with a username
   (use `~` or `$HOME`), UIDs, machine/host names, IP addresses, other OS users' details.
+- **Approved exceptions** (decisions 44, 45): the owner's name in the `LICENSE` copyright line and the GitHub
+  Pages link (it contains the owner's GitHub username) in `README.md`. Nowhere else; they are not findings.
 - Test data and examples use obviously fake values (`Player`, `example@example.com`).
 - If personal or secret data appears in tool output or the conversation, do not copy it into files.
 - Before finishing a stage, search the changed files for such data (e.g. `grep` for `@`, `/home/`, `token`,

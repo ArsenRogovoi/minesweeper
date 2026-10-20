@@ -106,4 +106,4 @@ owner first. Tick `[x]` when a task is done.
 - [ ] Owner: make the repository public; Settings → Pages → Source: “GitHub Actions”; push
 - [ ] Check the published site: styles, images, a full game
 - [x] Resolve Q8: “unofficial” notice in the About dialog and in the README (decision 43)
-- [ ] Resolve Q9 (license)
+- [x] Resolve Q9: MIT license (decision 45); README links to the site (decision 44)

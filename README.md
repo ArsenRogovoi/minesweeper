@@ -9,7 +9,7 @@ documents in [docs/](docs/), and the owner makes every decision.
 
 ## Play
 
-Play online: see the website link in the About section of this repository on GitHub. Or run the game locally
+Play online: <https://arsenrogovoi.github.io/minesweeper/>. Or run the game locally
 (see [Run locally](#run-locally)).
 
 Levels: Beginner (9 × 9, 10 mines), Intermediate (16 × 16, 40 mines), Expert (30 × 16, 99 mines) and Custom
@@ -82,3 +82,7 @@ and the tests, then the CSS build and the deploy to GitHub Pages. If a check fai
 
 This is an unofficial project, not affiliated with Microsoft. Windows is a trademark of Microsoft Corporation.
 No Microsoft artwork is used: all graphics are original drawings.
+
+## License
+
+[MIT](LICENSE).
