@@ -30,6 +30,7 @@ In scope:
 - UI in Russian and English, switchable from the menu; default from the browser language.
 - Remember level (including the custom size), Marks setting and language between visits.
 - Touch support: long press = flag, tap on an opened number = chord.
+- Published on GitHub Pages; a GitHub Actions workflow runs the checks and deploys (decisions 41, 42).
 
 Out of scope for v1 (explicitly declined):
 
@@ -37,9 +38,9 @@ Out of scope for v1 (explicitly declined):
 - First-click protection (the first click may hit a mine).
 - Working window buttons or dragging the window (they are decorative).
 - Saving an unfinished game.
-- Online features, hosting/deployment, CI.
+- Online features.
 
 ## Tech stack (summary)
 
 HTML · SCSS (7-1 pattern, compiled with the `sass` CLI) · vanilla JavaScript (ES modules) · Vitest (+ jsdom) ·
-ESLint · Prettier · npm · local git. Details in [REQUIREMENTS.md](REQUIREMENTS.md).
+ESLint · Prettier · npm · git + GitHub (Pages, Actions). Details in [REQUIREMENTS.md](REQUIREMENTS.md).

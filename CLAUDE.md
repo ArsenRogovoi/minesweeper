@@ -42,7 +42,8 @@ Applies to every file in the repo (code, tests, docs, configs, fixtures, commit 
 - **TDD**: write a failing test first, then the code, then refactor. No production code without a test.
 - A stage is done only when `npm test`, `npm run lint` and `npm run format:check` all pass.
   Tick the boxes in PLAN.md when a task is done.
-- Git is local only. Do not commit unless the owner asks.
+- Do not commit unless the owner asks. Never push: the repository has a GitHub remote, the owner pushes, and a
+  push to `master` deploys the site to GitHub Pages.
 - Everything in English: code, comments, docs, commit messages. (UI texts exist in RU and EN.)
 
 ## Commands (available after Stage 0)

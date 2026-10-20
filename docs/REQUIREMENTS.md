@@ -91,6 +91,7 @@ Changing the level starts a new game and resizes the window to fit the field.
 ### 2.2 Code structure
 
 ```
+.github/workflows/     pages.yml: checks, CSS build and deploy to GitHub Pages
 index.html
 assets/                SVG graphics (own artwork in XP style)
 css/                   compiled CSS (generated, git-ignored)
@@ -142,4 +143,7 @@ Rules:
 
 ### 2.6 Version control
 
-- Local git repository only, no remote, no CI.
+- Git repository on GitHub (`origin`). Agents commit locally and never push unless asked; the owner pushes.
+- GitHub Actions (`.github/workflows/pages.yml`): on every push to `master` it runs lint, the format check and
+  the tests, compiles the CSS and deploys `index.html`, `css/`, `src/js/` and `assets/` to GitHub Pages. A failing
+  check blocks the deploy.

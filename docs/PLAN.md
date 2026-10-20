@@ -98,3 +98,11 @@ owner first. Tick `[x]` when a task is done.
 - [x] Side-by-side comparison with XP screenshots, fix visual differences
 - [x] README with how to run, play and test
 - [x] Final code review (`/code-review`), clean-up, coverage check
+
+## Stage 11 — Publishing (GitHub Pages)
+
+- [x] Check the repository and its history for personal or secret data (none found; decision 40)
+- [x] GitHub Actions workflow: checks, CSS build, deploy to Pages (decisions 41, 42)
+- [ ] Owner: make the repository public; Settings → Pages → Source: “GitHub Actions”; push
+- [ ] Check the published site: styles, images, a full game
+- [ ] Resolve Q8 (notice about Microsoft) and Q9 (license)

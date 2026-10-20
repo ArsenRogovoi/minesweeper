@@ -22,7 +22,7 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 13 | First click          | No protection (may hit a mine) — deliberate deviation from XP            |
 | 14 | Touch                | Supported: long press = flag/“?”, tap on a number = chord                |
 | 15 | Persistence          | localStorage: level (incl. custom size), Marks, language                 |
-| 16 | Git                  | Local repository only                                                    |
+| 16 | Git                  | ~~Local repository only~~ — superseded by decision 41                    |
 | 17 | Architecture         | Pure `core` + `ui` layer, connected by events                            |
 | 18 | Docs/code language   | Everything in English                                                    |
 | 19 | Method               | TDD                                                                      |
@@ -46,6 +46,9 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | 37 | Narrow screens      | Resolves Q4. The whole window is scaled down to fit the screen width (never up), through the same `--u` unit as decision 30: `--u = base unit × --fit`; `--fit` is set by JS at start, on a new game and on resize. No horizontal scroll (2026-10-19) |
 | 38 | Long press          | Agreed P5: 400 ms, one constant (`LONG_PRESS_MS` in `src/js/ui/touch.js`). The mark is placed as soon as the time is up. Touch and pen pointers use `touch.js`; sliding to another cell cancels the gesture (2026-10-19) |
 | 39 | Hover states        | Window buttons (minimize, maximize, close) get Luna-like hot (lighter, on hover) and pressed (darker) looks; a menu bar item is highlighted on hover like an open one (2026-10-20) |
+| 40 | Commit metadata     | The owner's name and email in the git author/committer fields are fine; decision 24 is about file contents, not git metadata (2026-10-20) |
+| 41 | Hosting             | Supersedes 16. The repository is on GitHub (`origin`); the owner makes it public and the game is published on GitHub Pages. The owner pushes; agents commit locally and never push unless asked (a push to `master` deploys the site) (2026-10-20) |
+| 42 | Deploy              | GitHub Actions workflow `.github/workflows/pages.yml`, on every push to `master` and by hand: `npm ci`, lint, format check, tests, `build:css`; only if all pass, `index.html`, `css/`, `src/js/` and `assets/` are deployed to Pages. Compiled CSS stays out of git (2026-10-20) |
 
 ## Proposed (need confirmation)
 
@@ -67,3 +70,5 @@ is relied on. Add new rows instead of editing history; if a decision changes, ma
 | Q5 | 6     | ~~Supported browsers~~ — resolved by decision 33 |
 | Q6 | 7     | ~~Keyboard / accessibility~~ — resolved by decision 34 |
 | Q7 | 5     | ~~Desktop background~~ — resolved by decision 29                                         |
+| Q8 | 11    | Notice “unofficial, not affiliated with Microsoft; Windows is a Microsoft trademark”: where (README, About dialog, both)? |
+| Q9 | 11    | License for the public repository (none, MIT, other)?                                    |
