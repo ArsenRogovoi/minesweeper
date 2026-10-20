@@ -105,4 +105,5 @@ owner first. Tick `[x]` when a task is done.
 - [x] GitHub Actions workflow: checks, CSS build, deploy to Pages (decisions 41, 42)
 - [ ] Owner: make the repository public; Settings → Pages → Source: “GitHub Actions”; push
 - [ ] Check the published site: styles, images, a full game
-- [ ] Resolve Q8 (notice about Microsoft) and Q9 (license)
+- [x] Resolve Q8: “unofficial” notice in the About dialog and in the README (decision 43)
+- [ ] Resolve Q9 (license)

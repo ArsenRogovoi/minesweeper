@@ -7,6 +7,8 @@ export default {
   "about.version": "Версия",
   "about.description":
     "Учебный клон Windows XP Minesweeper (Сапёр) для браузера.",
+  "about.notice":
+    "Неофициальный проект, не связан с Microsoft. Windows — товарный знак Microsoft Corporation.",
   "rules.title": "Правила",
   "rules.goal.title": "Цель",
   "rules.goal.text":

@@ -23,7 +23,8 @@ function paragraph(document, className, text) {
 }
 
 /**
- * The "About" dialog: program name, version and what the program is (decision 35).
+ * The "About" dialog: program name, version, what the program is (decision 35) and the
+ * notice that it is unofficial (decision 43).
  * @param {{document: Document, t: (key: string) => string}} options
  */
 export function openAboutDialog({ document, t }) {
@@ -38,6 +39,7 @@ export function openAboutDialog({ document, t }) {
     name,
     paragraph(document, "dialog__text", `${t("about.version")} ${VERSION}`),
     paragraph(document, "dialog__text", t("about.description")),
+    paragraph(document, "dialog__text", t("about.notice")),
   );
   content.append(icon, text);
   return openInfoDialog({ document, t, title: t("about.title"), content });

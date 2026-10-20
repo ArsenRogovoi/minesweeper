@@ -6,6 +6,8 @@ export default {
   "about.title": "About Minesweeper",
   "about.version": "Version",
   "about.description": "A learning clone of Windows XP Minesweeper.",
+  "about.notice":
+    "Unofficial project, not affiliated with Microsoft. Windows is a trademark of Microsoft Corporation.",
   "rules.title": "Rules",
   "rules.goal.title": "Goal",
   "rules.goal.text":

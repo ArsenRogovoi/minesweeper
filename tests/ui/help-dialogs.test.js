@@ -41,6 +41,20 @@ describe("About dialog", () => {
     expect(text()).toContain("Учебный клон");
   });
 
+  it.each([
+    [
+      "en",
+      "Unofficial project, not affiliated with Microsoft. Windows is a trademark of Microsoft Corporation.",
+    ],
+    [
+      "ru",
+      "Неофициальный проект, не связан с Microsoft. Windows — товарный знак Microsoft Corporation.",
+    ],
+  ])("says it is unofficial and not Microsoft's (%s)", (language, notice) => {
+    openAboutDialog({ document, t: t(language) });
+    expect(text()).toContain(notice);
+  });
+
   it("closes with OK", () => {
     openAboutDialog({ document, t: t("en") });
     const buttons = document.querySelectorAll(".dialog__button");
